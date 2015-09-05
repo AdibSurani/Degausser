@@ -1,0 +1,201 @@
+﻿<Window x:Class="Degausser.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Degausser"
+        mc:Ignorable="d"
+        Title="Degausser - (no file open)"
+        Width="800" Height="600"
+        WindowState="Maximized">
+    <Window.Resources>
+        <local:MidiPlayer x:Key="MPlayer" />
+    </Window.Resources>
+    <!-- Open Import Export Refresh Play/Pause -->
+    <Window.CommandBindings>
+        <CommandBinding Command="{x:Static local:MainWindow.OpenCommand}" Executed="Open" />
+        <CommandBinding Command="{x:Static local:MainWindow.ImportCommand}" Executed="Import" />
+        <CommandBinding Command="{x:Static local:MainWindow.ExportCommand}" Executed="Export" />
+        <CommandBinding Command="{x:Static local:MainWindow.RefreshCommand}" Executed="Refresh" />
+        <CommandBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Executed="PlayPause" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="{x:Static local:MainWindow.OpenCommand}" Key="O" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.ImportCommand}" Key="I" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.ExportCommand}" Key="E" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.RefreshCommand}" Key="R" Modifiers="Ctrl"/>
+        <KeyBinding Command="{x:Static local:MainWindow.PlayPauseCommand}" Key="P" Modifiers="Ctrl"/>
+    </Window.InputBindings>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Open" Command="{x:Static local:MainWindow.OpenCommand}" />
+            <MenuItem Header="_Import" Command="{x:Static local:MainWindow.ImportCommand}" />
+            <MenuItem Header="_Export" Command="{x:Static local:MainWindow.ExportCommand}" />
+            <MenuItem Header="_Refresh" Command="{x:Static local:MainWindow.RefreshCommand}" />
+            <MenuItem Header="_Play/Pause" Command="{x:Static local:MainWindow.PlayPauseCommand}" />
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.0a" />
+            <StatusBarItem>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}Track: {0} / {1}">
+                            <Binding Source ="{StaticResource MPlayer}" Path="Position" />
+                            <Binding Source ="{StaticResource MPlayer}" Path="Length" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StatusBarItem>
+            <Separator />
+            <StatusBarItem>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="Selected: {0} / {1}">
+                            <Binding ElementName="lstMediaLibrary" Path="SelectedItems.Count" />
+                            <Binding ElementName="lstMediaLibrary" Path="Items.Count" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </StatusBarItem>
+        </StatusBar>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="Now Playing" Grid.Column="0">
+                <DockPanel Grid.Column="0">
+                    <Grid DockPanel.Dock="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Track:" Grid.Column="0" Grid.Row="0" VerticalAlignment="Top" Padding="3"/>
+                        <Slider Value="{Binding Source={StaticResource MPlayer}, Path=Position, Mode=TwoWay}" Maximum="{Binding Source={StaticResource MPlayer}, Path=Length, Mode=OneWay}" LargeChange="48" SmallChange="12" Grid.Column="1" Grid.Row="0" IsSnapToTickEnabled="False" />
+                        <TextBlock Text="Volume:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" Padding="3"/>
+                        <Slider Grid.Column="1" Grid.Row="1" Value="{Binding Source={StaticResource MPlayer}, Path=Volume, Mode=TwoWay}" Maximum="65535" LargeChange="1000" SmallChange="100" />
+                        <TextBlock Text="Tempo:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Padding="3"/>
+                        <Slider Grid.Column="1" Grid.Row="2" Value="{Binding Source={StaticResource MPlayer}, Path=TempoModifier, Mode=TwoWay}" Maximum="1" Minimum="-1" IsSnapToTickEnabled="False" IsMoveToPointEnabled="False" />
+                    </Grid>
+                    <ListBox Margin="3" Name="lstInstruments" DockPanel.Dock="Top" ItemsSource="{Binding Source={StaticResource MPlayer}, Path=Channels}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding Path=IsActive}" Content="{Binding Path=InstrumentName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <ScrollViewer x:Name="karaokeViewer" VerticalScrollBarVisibility="Visible">
+                        <TextBlock x:Name="karaokeBlock" FontSize="16" FontFamily="Segoe UI,Microsoft JhengHei" FontWeight="Bold">
+                        Karaoke lyrics
+                            <TextBlock.TextEffects>
+                                <TextEffect PositionStart="0" PositionCount="{Binding ElementName=karaokeEffect, Path=PositionStart}" Foreground="Red"/>
+                                <TextEffect x:Name="karaokeEffect">
+                                    <TextEffect.Foreground>
+                                        <LinearGradientBrush StartPoint="0,0.5" EndPoint="1,0.5">
+                                            <GradientStop x:Name="karaokeFraction" Color="Red"/>
+                                            <GradientStop Color="Black" Offset="{Binding ElementName=karaokeFraction, Path=Offset}"/>
+                                        </LinearGradientBrush>
+                                    </TextEffect.Foreground>
+                                </TextEffect>
+                            </TextBlock.TextEffects>
+                        </TextBlock>
+                    </ScrollViewer>
+                </DockPanel>
+            </GroupBox>
+            <GridSplitter Grid.Column="1" Width="3" HorizontalAlignment="Stretch" ShowsPreview="True" />
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <GroupBox Header="Media Library" Grid.Row="0">
+                    <local:SortableListView x:Name="lstMediaLibrary" FontFamily="Segoe UI,Microsoft YaHei">
+                        <local:SortableListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="File Name" DisplayMemberBinding="{Binding Filename}" Width="350" />
+                                    <GridViewColumn Header="Top Folder" DisplayMemberBinding="{Binding Folder}" Width="100"/>
+                                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="250" />
+                                    <GridViewColumn Header="Lines" DisplayMemberBinding="{Binding Lines}" Width="40" />
+                                    <GridViewColumn Header="I" DisplayMemberBinding="{Binding Instruments}" Width="20"/>
+                                    <GridViewColumn Header="K">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasKaraoke, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="P">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasPiano, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="G">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasGuitar, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="150"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </local:SortableListView.View>
+                    </local:SortableListView>
+                </GroupBox>
+                <GroupBox Header="Save File" Grid.Row="2">
+                    <local:SortableListView x:Name="lstSaveEditor" Grid.Row="2" FontFamily="Segoe UI,Microsoft YaHei">
+                        <local:SortableListView.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Header="Slot" DisplayMemberBinding="{Binding Slot}" Width="35" />
+                                    <GridViewColumn Header="Title" DisplayMemberBinding="{Binding Title}" Width="250"/>
+                                    <GridViewColumn Header="Lines" DisplayMemberBinding="{Binding Lines}" Width="40"/>
+                                    <GridViewColumn Header="I" DisplayMemberBinding="{Binding Instruments}" Width="20" />
+                                    <GridViewColumn Header="K">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasKaraoke, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="P">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasPiano, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="G">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <CheckBox IsChecked="{Binding HasGuitar, Mode=OneWay}" IsHitTestVisible="False" Focusable="False" />
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Author" DisplayMemberBinding="{Binding Author}" Width="150"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </local:SortableListView.View>
+                    </local:SortableListView>
+                </GroupBox>
+                <GroupBox Header="Debug Logs" Grid.Row="4">
+                    <TextBox x:Name="txtLogView" IsReadOnly="True" VerticalScrollBarVisibility="Visible" FontFamily="Segoe UI,Microsoft YaHei" />
+                </GroupBox>
+                <GridSplitter Grid.Row="1" Height="3" HorizontalAlignment="Stretch" ShowsPreview="True" />
+                <GridSplitter Grid.Row="3" Height="3" HorizontalAlignment="Stretch" ShowsPreview="True" />
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

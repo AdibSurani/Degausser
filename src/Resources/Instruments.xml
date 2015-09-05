@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+  Useful websites:
+  MIDI Instruments: https://msdn.microsoft.com/en-us/library/dd798680(v=vs.85).aspx
+  Notes and Percussion: https://msdn.microsoft.com/en-us/library/dd798679(v=vs.85).aspx
+-->
+<Instruments>
+  <Instrument ID="0" Name="(Blank)" Type="NUL" Midi="255"/>
+  
+  <!-- SCL Instruments -->
+  <Instrument ID="1" Name="Piano" Type="SCL" Midi="1"/>
+  <Instrument ID="2" Name="Electric Piano" Type="SCL" Midi="3"/>
+  <Instrument ID="3" Name="Rock Organ" Type="SCL" Midi="18"/>
+  <Instrument ID="4" Name="Synth Lead" Type="SCL" Midi="81"/>
+  <Instrument ID="5" Name="Synth Bell" Type="SCL" Midi="88"/>
+  <Instrument ID="6" Name="Pipe Organ" Type="SCL" Midi="19"/>
+  <Instrument ID="7" Name="Folk Guitar" Type="SCL" Midi="25"/>
+  <Instrument ID="8" Name="Electric Guitar" Type="SCL" Midi="26"/>
+  <Instrument ID="9" Name="Distortion Guitar" Type="SCL" Midi="30"/>
+  <Instrument ID="10" Name="Rock Guitar" Type="SCL" Midi="28"/>
+  <Instrument ID="11" Name="Pick Bass" Type="SCL" Midi="34"/>
+  <Instrument ID="12" Name="Synth Bass" Type="SCL" Midi="39"/>
+  <Instrument ID="13" Name="Acoustic Bass" Type="SCL" Midi="32"/>
+  <Instrument ID="14" Name="Strings" Type="SCL" Midi="44"/>
+  <Instrument ID="15" Name="Violin" Type="SCL" Midi="40"/>
+  <Instrument ID="16" Name="Double Bass" Type="SCL" Midi="43"/> <!-- Contrabass -->
+  <Instrument ID="17" Name="Harp" Type="SCL" Midi="46"/>
+  <Instrument ID="18" Name="Pizzicato Violin" Type="SCL" Midi="45"/>
+  <Instrument ID="19" Name="Piccolo" Type="SCL" Midi="72"/>
+  <Instrument ID="20" Name="Flute" Type="SCL" Midi="73"/>
+  <Instrument ID="21" Name="Clarinet" Type="SCL" Midi="71"/>
+  <Instrument ID="22" Name="Oboe" Type="SCL" Midi="68"/>
+  <Instrument ID="23" Name="Soprano Sax" Type="SCL" Midi="64"/>
+  <Instrument ID="24" Name="Alto Sax" Type="SCL" Midi="65"/>
+  <Instrument ID="25" Name="Brass" Type="SCL" Midi="62"/>
+  <Instrument ID="26" Name="Trumpet" Type="SCL" Midi="56"/>
+  <Instrument ID="27" Name="Trombone" Type="SCL" Midi="57"/>
+  <Instrument ID="28" Name="Horn" Type="SCL" Midi="60"/>
+  <Instrument ID="29" Name="Tuba" Type="SCL" Midi="58"/>
+  <Instrument ID="30" Name="Harmonica" Type="SCL" Midi="22"/>
+  <Instrument ID="31" Name="Pan Flute" Type="SCL" Midi="75"/>
+  <Instrument ID="32" Name="Ocarina" Type="SCL" Midi="79"/>
+  <Instrument ID="33" Name="Vibraphone" Type="SCL" Midi="11"/>
+  <Instrument ID="34" Name="Marimba" Type="SCL" Midi="12"/>
+  <Instrument ID="35" Name="Timpani" Type="SCL" Midi="47"/>
+  <Instrument ID="36" Name="Steel Drum" Type="SCL" Midi="114"/>
+  <Instrument ID="37" Name="Chorus" Type="SCL" Midi="91"/>
+  <Instrument ID="38" Name="Shamisen" Type="SCL" Midi="106"/>
+  <Instrument ID="39" Name="Koto" Type="SCL" Midi="107"/>
+  <Instrument ID="40" Name="Shakuhachi" Type="SCL" Midi="77"/>
+  <Instrument ID="41" Name="NES" Type="SCL" Midi="87"/> <!-- Famicom A -->
+
+  <!-- DRM Instruments -->
+  <Instrument ID="42" Name="Rock Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/> <!-- Normal Drums -->
+  <Instrument ID="43" Name="Electronic Drums" Type="DRM" Midi="0,40,35,51,54,42,48,47,50,46,57"/>
+  <Instrument ID="44" Name="Synth Drums" Type="DRM" Midi="0,40,35,29,54,42,48,47,50,46,57"/>
+  <Instrument ID="45" Name="Percussion Set" Type="DRM" Midi="0,38,41,81,58,52,54,38,54,55,57"/> <!-- Orchestral Drums -->
+  <Instrument ID="46" Name="Bongo Set" Type="DRM" Midi="0,60,61,80,81,54,75,39,69,66,65"/>
+  <Instrument ID="47" Name="Conga Set" Type="DRM" Midi="0,63,64,62,58,55,82,85,56,77,76"/>
+  <Instrument ID="48" Name="Japanese Percussion Set" Type="DRM" Midi="0,62,54,64,55,59,56,62,64,60,61"/> <!-- Wadaiko Set -->
+
+  <!-- GT and KB Instruments -->
+  <InstrumentRange ID="49-89" Type="GT" Offset="-48"/>
+  <InstrumentRange ID="90-130" Type="KB" Offset="-89"/>
+
+  <!-- More SCL Instruments -->
+  <Instrument ID="131" Name="Harpsichord" Type="SCL" Midi="6"/>
+  <Instrument ID="132" Name="Accordion" Type="SCL" Midi="21"/>
+  <Instrument ID="133" Name="Mute Trumpet" Type="SCL" Midi="59"/>
+  <Instrument ID="134" Name="Music Box" Type="SCL" Midi="10"/>
+  <Instrument ID="135" Name="Banjo" Type="SCL" Midi="105"/>
+  <Instrument ID="136" Name="Square Lead" Type="SCL" Midi="80"/>
+  <Instrument ID="137" Name="Spanish Guitar" Type="SCL" Midi="24"/>
+  <Instrument ID="138" Name="Clean Guitar" Type="SCL" Midi="27"/>
+  <Instrument ID="139" Name="Overdrive Guitar" Type="SCL" Midi="29"/>
+  <Instrument ID="140" Name="Slap Bass" Type="SCL" Midi="36"/>
+
+  <!-- More GT and KB Instruments -->
+  <InstrumentRange ID="141-150" Type="GT" Offset="-10"/>
+  <InstrumentRange ID="151-160" Type="KB" Offset="-20"/>
+
+  <!-- BBP Instruments (default unedited) -->
+  <Instrument ID="161" Name="Electro Bass" Type="SCL" Midi="0"/>
+  <Instrument ID="162" Name="Synth Pad" Type="SCL" Midi="0"/>
+  <Instrument ID="163" Name="Fat Lead" Type="SCL" Midi="0"/>
+  <Instrument ID="164" Name="Sine" Type="SCL" Midi="0"/>
+  <Instrument ID="165" Name="Famicom B" Type="SCL" Midi="0"/>
+  <Instrument ID="166" Name="Famicom C" Type="SCL" Midi="0"/>
+  <Instrument ID="167" Name="Famicom Bass" Type="SCL" Midi="0"/>
+  <Instrument ID="168" Name="Orchestra Hit" Type="SCL" Midi="0"/>
+  <Instrument ID="169" Name="Tenor Sax" Type="SCL" Midi="0"/>
+  <Instrument ID="170" Name="Cello" Type="SCL" Midi="0"/>
+  <Instrument ID="171" Name="Bassoon" Type="SCL" Midi="0"/> <!-- Fagotto -->
+
+  <!-- BBP GT and KB Instruments -->
+  <InstrumentRange ID="172-182" Type="GT" Offset="-11"/>
+  <InstrumentRange ID="183-193" Type="KB" Offset="-22"/>
+
+  <!-- BBP DRM Instruments (default unedited) -->
+  <Instrument ID="194" Name="Noise Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/>
+  <Instrument ID="195" Name="Jazz Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/>
+  <Instrument ID="196" Name="Pop Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/>
+
+  <!-- BBP GT_DX Instruments (not sure if right...)
+	// GT_DX
+	// Marimba, EleGuitar, CleanGt, PickBass, SlapBass, SynthBass, AcoBass, SynthBell,
+	// Contrabass, Strings, Chorus, Trombone, Brass, MuteTrp, Oboe, Ocarina
+	<Instrument ID="197" Type="GT_DX" ReplaceWith="34"/>
+	<Instrument ID="198" Type="GT_DX" ReplaceWith="8"/>
+	<Instrument ID="199" Type="GT_DX" ReplaceWith="138"/>
+	<Instrument ID="200" Type="GT_DX" ReplaceWith="11"/>
+	<Instrument ID="201" Type="GT_DX" ReplaceWith="140"/>
+	<Instrument ID="202" Type="GT_DX" ReplaceWith="12"/>
+	<Instrument ID="203" Type="GT_DX" ReplaceWith="13"/>
+	<Instrument ID="204" Type="GT_DX" ReplaceWith="5"/>
+	<Instrument ID="205" Type="GT_DX" ReplaceWith="16"/>
+	<Instrument ID="206" Type="GT_DX" ReplaceWith="14"/>
+	<Instrument ID="207" Type="GT_DX" ReplaceWith="37"/>
+	<Instrument ID="208" Type="GT_DX" ReplaceWith="27"/>
+	<Instrument ID="209" Type="GT_DX" ReplaceWith="25"/>
+	<Instrument ID="210" Type="GT_DX" ReplaceWith="133"/>
+	<Instrument ID="211" Type="GT_DX" ReplaceWith="22"/>
+	<Instrument ID="212" Type="GT_DX" ReplaceWith="32"/>
+	-->
+</Instruments>

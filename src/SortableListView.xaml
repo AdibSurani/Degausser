@@ -1,0 +1,26 @@
+﻿<ListView x:Class="Degausser.SortableListView"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+          xmlns:local="clr-namespace:Degausser"
+          mc:Ignorable="d"
+          d:DesignHeight="300" d:DesignWidth="300">
+    <ListView.Resources>
+        <Style TargetType="GridViewColumnHeader">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+        <DataTemplate x:Key="HeaderTemplateAscending">
+            <DockPanel LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Center" Text="{Binding}"/>
+                <Path DockPanel.Dock="Right" Fill="Gray" Data="M 5,10 L 15,10 L 10,5 L 5,10"/>
+            </DockPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="HeaderTemplateDescending">
+            <DockPanel LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" HorizontalAlignment="Center" Text="{Binding}"/>
+                <Path DockPanel.Dock="Right" Fill="Gray" Data="M 5,5 L 10,10 L 15,5 L 5,5"/>
+            </DockPanel>
+        </DataTemplate>
+    </ListView.Resources>
+</ListView>
