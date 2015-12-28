@@ -8,15 +8,15 @@ namespace Degausser
     public class MidiPlayer : INotifyPropertyChanged
     {
         [DllImport("winmm.dll")]
-        static extern uint midiOutOpen(out int lphMidiOut, int uDeviceID, int dwCallback, int dwInstance, uint dwFlags);
+        static extern uint midiOutOpen(out IntPtr lphMidiOut, uint uDeviceID, IntPtr dwCallback, IntPtr dwInstance, uint dwFlags);
         [DllImport("winmm.dll")]
-        static extern uint midiOutShortMsg(int hMidiOut, int dwMsg);
+        static extern uint midiOutShortMsg(IntPtr hMidiOut, int dwMsg);
         [DllImport("winmm.dll")]
-        static extern uint midiOutClose(int hMidiOut);
+        static extern uint midiOutClose(IntPtr hMidiOut);
         [DllImport("winmm.dll")]
-        static extern int midiOutSetVolume(int uDeviceID, int dwVolume);
+        static extern int midiOutSetVolume(IntPtr uDeviceID, int dwVolume);
         [DllImport("winmm.dll")]
-        static extern int midiOutGetVolume(int uDeviceID, out int lpdwVolume);
+        static extern int midiOutGetVolume(IntPtr uDeviceID, out int lpdwVolume);
 
         const int MAX_CHANNELS = 10;
         const int MAX_TICKS = 7200;
@@ -38,7 +38,7 @@ namespace Degausser
         };
         const byte StopAllNotes = 0x7B;
 
-        static int MidiOut;
+        static IntPtr MidiOut;
         public static MidiPlayer Instance { get; private set; }
 
         MidiData midiData = new MidiData(new short[0]);
@@ -181,7 +181,7 @@ namespace Degausser
         public MidiPlayer()
         {
             Instance = this;
-            midiOutOpen(out MidiOut, 0, 0, 0, 0);
+            midiOutOpen(out MidiOut, 0, IntPtr.Zero, IntPtr.Zero, 0);
             for (int i = 0; i < MAX_CHANNELS; i++)
             {
                 midiData.Channels[i].InstrumentName = $"Instrument {i}";

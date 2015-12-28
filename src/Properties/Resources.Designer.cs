@@ -72,16 +72,18 @@ namespace Degausser.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
+        ///&lt;!--
+        ///  Useful websites:
+        ///  MIDI Instruments: https://msdn.microsoft.com/en-us/library/dd798680(v=vs.85).aspx
+        ///  Notes and Percussion: https://msdn.microsoft.com/en-us/library/dd798679(v=vs.85).aspx
+        ///--&gt;
         ///&lt;Instruments&gt;
         ///  &lt;Instrument ID=&quot;0&quot; Name=&quot;(Blank)&quot; Type=&quot;NUL&quot; Midi=&quot;255&quot;/&gt;
         ///  
         ///  &lt;!-- SCL Instruments --&gt;
         ///  &lt;Instrument ID=&quot;1&quot; Name=&quot;Piano&quot; Type=&quot;SCL&quot; Midi=&quot;1&quot;/&gt;
         ///  &lt;Instrument ID=&quot;2&quot; Name=&quot;Electric Piano&quot; Type=&quot;SCL&quot; Midi=&quot;3&quot;/&gt;
-        ///  &lt;Instrument ID=&quot;3&quot; Name=&quot;Rock Organ&quot; Type=&quot;SCL&quot; Midi=&quot;18&quot;/&gt;
-        ///  &lt;Instrument ID=&quot;4&quot; Name=&quot;Synth Lead&quot; Type=&quot;SCL&quot; Midi=&quot;81&quot;/&gt;
-        ///  &lt;Instrument ID=&quot;5&quot; Name=&quot;Synth Bell&quot; Type=&quot;SCL&quot; Midi=&quot;88&quot;/&gt;
-        ///  &lt;Instrument ID=&quot;6&quot; Name=&quot;Pipe Organ&quot; Type=&quot;SCL&quot; M [rest of string was truncated]&quot;;.
+        ///  &lt;Instrument ID=&quot;3&quot; Name=&quot;Rock Org [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Instruments {
             get {

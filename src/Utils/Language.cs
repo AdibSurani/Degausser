@@ -128,5 +128,32 @@ namespace Degausser.Utils
             }
             return EngString.ToString();
         }
+
+        public static string IOFriendly(this string str)
+        {
+            int length = str.Length;
+            char[] buffer = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                char c = str[i], d;
+                switch (c)
+                {
+                    case '/': d = '／'; break;
+                    case '\\': d = '＼'; break;
+                    case '?': d = '？'; break;
+                    case '%': d = '％'; break;
+                    case '*': d = '＊'; break;
+                    case ':': d = '：'; break;
+                    case '|': d = '｜'; break;
+                    case '"': d = '＂'; break;
+                    case '<': d = '＜'; break;
+                    case '>': d = '＞'; break;
+                    default: d = c < 32 ? ' ' : c; break;
+                }
+                buffer[i] = d;
+            }
+            return new string(buffer);
+        }
+
     }
 }

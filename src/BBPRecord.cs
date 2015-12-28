@@ -57,7 +57,68 @@ namespace Degausser
         public BBPRecord(string path)
         {
             FullPath = path;
-            if (Path.GetExtension(path).ToLower() == ".bdx")
+            if (Path.GetExtension(path).ToLower() == ".bin")
+            {
+                using (var br = new BinaryReader(File.OpenRead(path)))
+                {
+                    var filesize = br.BaseStream.Length;
+
+                    if (filesize < 20000000) throw new InvalidDataException($"{path} has incorrect filesize error #1");
+
+                    int mapcount = br.ReadInt32();
+                    br.ReadInt32();
+
+                    if (mapcount * 12 > filesize) throw new InvalidDataException($"{path} has incorrect filesize error #2");
+
+                    var stuff = Enumerable.Range(0, mapcount * 3).Select(_ => br.ReadUInt32()).ToList();
+                    var actualsize = Enumerable.Range(0, mapcount).Sum(i => (long)stuff[i * 3 + 2]) + mapcount * 12 + 8;
+
+                    if (actualsize != filesize) throw new InvalidDataException($"{path} has incorrect filesize error #3");
+
+                    var offset = Enumerable.Range(0, mapcount + 1).TakeWhile(i => stuff[i * 3] != 0x8900000).Sum(i => stuff[i * 3 + 2]) + mapcount * 12 + 8;
+
+                    // all filesizes are good!
+                    br.BaseStream.Position = offset;
+                    if (br.ReadInt32() != 0x5544) throw new InvalidDataException($"{path} has incorrect header error #4");
+                    var packsize = br.ReadInt32();
+                    if (packsize >= 16777216) throw new InvalidDataException($"{path} has incorrect header error #5");
+
+                    if (br.ReadInt64() != 0) throw new InvalidDataException($"{path} has incorrect header error #6");
+
+                    var bytes = br.ReadBytes(packsize);
+                    var nums = Enumerable.Range(0, 17).Select(i => BitConverter.ToInt32(bytes, i * 4)).ToList();
+
+                    var unc1 = Decompress(bytes, nums[3], nums[4]);
+                    bbp = unc1.ToStruct<BBPFormat>();
+                    if (nums[5] == 1) vocaloid = Decompress(bytes, nums[7], nums[8]);
+
+                    // metadata stuff temporarily here
+                    var instrTypes = bbp.channelInfo.Select(c => c.playType);
+                    var hasPiano = instrTypes.Contains(PlayType.Piano);
+                    var hasGuitar = instrTypes.Contains(PlayType.Guitar);
+                    var hasDrum = instrTypes.Contains(PlayType.Drum);
+                    mgrItem = JbMgrFormat.JbMgrItem.Empty;
+                    mgrItem.Author = "Degausser2.1a";
+                    mgrItem.Title = bbp.title;
+                    mgrItem.TitleSimple = mgrItem.Title;
+                    //mgr.Flags
+                    mgrItem.ID = 0x80000001;
+                    mgrItem.Flags = new JbMgrFormat.JbMgrItem.JbFlags
+                    {
+                        HasDrum = hasDrum,
+                        HasGuitar = hasGuitar,
+                        HasPiano = hasPiano,
+                        HasLyrics = bbp.karaokeTimer[0] != -1,
+                        HasMelody = bbp.mainInstrumentMaybe != 0xFF, // not sure about this
+                        IsValid = true,
+                        OnSD = true,
+                        HasVocals = vocaloid != null,
+                        IsSingable = vocaloid != null,
+                        Parts = bbp.channelInfo.Count(c => c.instrument != 0)                        
+                    };
+                }
+            }
+            else if (Path.GetExtension(path).ToLower() == ".bdx")
             {
                 var bytes = File.ReadAllBytes(path);
                 if (bytes.Length != 32768)

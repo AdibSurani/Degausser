@@ -48,7 +48,7 @@ namespace Degausser
             // metadata stuff temporarily here
             mgr = JbMgrFormat.JbMgrItem.Empty;
             //mgr.Author = bdx.contributor.ToString();
-            mgr.Author = "Degausser2.0a";
+            mgr.Author = "Degausser2.1a";
             mgr.Title = bbp.title;
             mgr.TitleSimple = mgr.Title;
             //mgr.Flags

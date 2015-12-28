@@ -234,7 +234,7 @@ namespace Degausser
                     try
                     {
                         var item = record.mgrItem;
-                        string bbpPath = Path.Combine("Ripped", $"{item.Title.Replace("\n", "")} ({item.Author}).bbp");
+                        string bbpPath = Path.Combine("Ripped", $"{item.Title.Replace("\n", "")} ({item.Author}).bbp".IOFriendly());
                         record.SaveAsBBPFile(bbpPath);
                         ((List<BBPRecord>)lstMediaLibrary.ItemsSource).Add(new BBPRecord(bbpPath));
                         return false;
@@ -256,7 +256,7 @@ namespace Degausser
             lstMediaLibrary.IsEnabled = false;
             var paths = (from path in Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.*", SearchOption.AllDirectories)
                          let ext = path.Substring(path.Length - 4).ToLower()
-                         where ext == ".bdx" || ext == ".bbp"
+                         where ext == ".bdx" || ext == ".bbp" || ext == ".bin"
                          select path).ToList();
             lstMediaLibrary.Items.Add(new { Filename = $"Populating list... please wait (approximately {paths.Count} items)" });
 
