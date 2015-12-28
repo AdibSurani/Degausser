@@ -83,9 +83,14 @@ namespace Degausser
                     var packsize = br.ReadInt32();
                     if (packsize >= 16777216) throw new InvalidDataException($"{path} has incorrect header error #5");
 
-                    if (br.ReadInt64() != 0) throw new InvalidDataException($"{path} has incorrect header error #6");
+                    br.ReadInt64();
+                    //if (br.ReadInt64() != 0) throw new InvalidDataException($"{path} has incorrect header error #6");
 
                     var bytes = br.ReadBytes(packsize);
+
+                    if (!new byte[] { 1, 0, 2, 0, 1, 0, 0, 0, 60, 78, 1, 0, 68, 0, 0, 0 }.SequenceEqual(bytes.Take(16)))
+                        throw new InvalidDataException($"{path} has incorrect data error #7");
+
                     var nums = Enumerable.Range(0, 17).Select(i => BitConverter.ToInt32(bytes, i * 4)).ToList();
 
                     var unc1 = Decompress(bytes, nums[3], nums[4]);
