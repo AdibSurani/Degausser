@@ -35,7 +35,7 @@
             <MenuItem Header="_Play/Pause" Command="{x:Static local:MainWindow.PlayPauseCommand}" />
         </Menu>
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.1a" />
+            <StatusBarItem DockPanel.Dock="Right" Content="Degausser v2.1b" />
             <StatusBarItem>
                 <TextBlock>
                     <TextBlock.Text>

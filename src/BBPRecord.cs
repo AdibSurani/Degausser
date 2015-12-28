@@ -103,7 +103,7 @@ namespace Degausser
                     var hasGuitar = instrTypes.Contains(PlayType.Guitar);
                     var hasDrum = instrTypes.Contains(PlayType.Drum);
                     mgrItem = JbMgrFormat.JbMgrItem.Empty;
-                    mgrItem.Author = "Degausser2.1a";
+                    mgrItem.Author = "Degausser2.1b";
                     mgrItem.Title = bbp.title;
                     mgrItem.TitleSimple = mgrItem.Title;
                     //mgr.Flags
