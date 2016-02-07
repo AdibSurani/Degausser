@@ -78,7 +78,7 @@ namespace Degausser
                 public int Parts { get { return (flag >> 3) % 16; } set { flag = (flag & ~120) | (value << 3); } } // Bit3-7
                 public bool HasMelody { get { return this[8]; } set { this[8] = value; } }
                 public bool IsSingable { get { return this[9]; } set { this[9] = value; } } // In the UTAU section
-                // Bit10 = 0
+                public bool IsClassic { get { return this[10]; } set { this[10] = value; } } //classic? foreign?
                 public bool HasLyrics { get { return this[11]; } set { this[11] = value; } }
                 public bool IsReceived { get { return this[12]; } set { this[12] = value; } }
                 public bool HasFans { get { return this[13]; } set { this[13] = value; } }
@@ -101,8 +101,8 @@ namespace Degausser
                 public bool IsValid
                 {
                     // Check bit 0 is set and bits 2,10,17-19,22 are unset:
-                    get { return (flag & 0x4E0405) == 1 && IsSingable == HasVocals; }
-                    set { flag = (flag & ~0x4E0405) | (value ? 1 : 0); }
+                    get { return (flag & 0x4C0005) == 1 && IsSingable == HasVocals; }
+                    set { flag = (flag & ~0x4C0005) | (value ? 1 : 0); }
                 }
             }
         }

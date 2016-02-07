@@ -32,7 +32,7 @@ namespace Degausser
         {
             if (IsEnabled = bbp.karaokeTimer[0] != 0x3FFF)
             {
-                Lyrics = bbp.karaokeLyrics;
+                Lyrics = new string(bbp.karaokeLyrics);
                 timer = bbp.karaokeTimer.Select(t => t & 0x3FFF).ToList();
                 maxTicks = (bbp.linesPlus6 - 6) * 48;
             }

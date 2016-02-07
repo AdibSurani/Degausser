@@ -16,8 +16,9 @@ namespace Degausser
         public int titleID;
         public int dateCreated;
         public int dateModified;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 252)]
-        public string title;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 250)]
+        public char[] title;
+        public uint test;   //unknown
         public byte linesPlus6;
         public byte timeSignature;
         public byte masterVolumeMaybe;
@@ -135,8 +136,8 @@ namespace Degausser
         public int[] pianoOrig; // need to convert the indexed bdx pianopairs to pianoorig
 
         // 0xFC2C
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 3000)]
-        public string karaokeLyrics;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3000)]
+        public char[] karaokeLyrics;
 
         // 0x1139C
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3000)]
