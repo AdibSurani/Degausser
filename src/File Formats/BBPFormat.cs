@@ -18,7 +18,10 @@ namespace Degausser
         public int dateModified;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 250)]
         public char[] title;
-        public uint test;   //unknown
+        public byte test0;   //to be renamed -- unknown, always 1?
+        public byte test1;   //to be renamed -- unknown, always 0?
+        public byte test2;   //to be renamed -- classic
+        public sbyte test3;   //to be renamed -- main instrument
         public byte linesPlus6;
         public byte timeSignature;
         public byte masterVolumeMaybe;

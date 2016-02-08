@@ -29,5 +29,17 @@ namespace Degausser
 
         public static byte HiByte(this short s) => (byte)(s >> 8);
         public static byte LoByte(this short s) => (byte)(s & 0xFF);
+
+        public static string ArrayToString(this char[] buffer)
+        {
+            return String.Concat(buffer.TakeWhile(c => c != 0));
+        }
+
+        public static char[] StringToArray(this string str, int length)
+        {
+            var buffer = str.ToCharArray();
+            Array.Resize(ref buffer, length);
+            return buffer;
+        }
     }
 }

@@ -49,7 +49,7 @@ namespace Degausser
             mgr = JbMgrFormat.JbMgrItem.Empty;
             //mgr.Author = bdx.contributor.ToString();
             mgr.Author = "Degausser2.2a";
-            mgr.Title = new string(bbp.title);
+            mgr.Title = bbp.title.ArrayToString();
             mgr.TitleSimple = mgr.Title;
             //mgr.Flags
             mgr.ID = 0x80000001;
@@ -68,7 +68,7 @@ namespace Degausser
 
         void DoCommonStuff()
         {
-            bbp.title = string.Concat(bdx.labels).Replace("\n", "").ToCharArray();
+            bbp.title = string.Concat(bdx.labels).Replace("\n", "").StringToArray(250);
             bbp.version = 0x20001;
             bbp.dateCreated = bdx.dateCreated;
             bbp.dateModified = bdx.dateModified;
@@ -251,7 +251,7 @@ namespace Degausser
                     }
                     sb.Append(tmp[i]);
                 }
-                bbp.karaokeLyrics = sb.ToString().ToCharArray();
+                bbp.karaokeLyrics = sb.ToString().StringToArray(3000);
 
             }
         }

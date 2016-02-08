@@ -155,5 +155,47 @@ namespace Degausser.Utils
             return new string(buffer);
         }
 
+        static readonly string[] kanaGroups =
+        {
+            "アカサタナハマヤラワ",
+            "イキシチニヒミリ",
+            "ウクスツヌフムユル",
+            "エケセテネヘメレ",
+            "オコソトノホモヨロ"
+        };
+
+        public static string Simplify(this string str)
+        {
+            var sb = new StringBuilder();
+            foreach (var fullchar in str)
+            {
+                if (fullchar < 0x7f || fullchar > 0x3000 || "•…※、。「」〒".Contains(fullchar))
+                {
+                    var c = fullchar.ToString().ToLower().Normalize(NormalizationForm.FormKD)[0];
+                    if (c >= 'ぁ' && c <= 'ゔ')
+                    {
+                        c += (char)0x60; // hiragana -> katakana
+                    }
+                    if ("ァィゥェォッャュョヮ".Contains(c))
+                    {
+                        c++; // small kana -> big kana
+                    }
+                    else if (c == 'ヵ')
+                    {
+                        c = 'カ';
+                    }
+                    else if (c == 'ヶ')
+                    {
+                        c = 'ケ';
+                    }
+                    else if (c == 'ー')
+                    {
+                        c = kanaGroups.Single(g => g.Contains(sb[sb.Length - 1]))[0];
+                    }
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
     }
 }
