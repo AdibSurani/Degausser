@@ -66,6 +66,7 @@
     <Compile Include="File Formats\BDXFormat.cs" />
     <Compile Include="BDXRecordInfo.cs" />
     <Compile Include="BDXRecordMidi.cs" />
+    <Compile Include="File Formats\BIN2BBP.cs" />
     <Compile Include="File Formats\Common.cs" />
     <Compile Include="File Formats\JbMgrFormat.cs" />
     <Compile Include="HackingTests.cs" />
