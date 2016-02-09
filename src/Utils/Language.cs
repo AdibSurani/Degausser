@@ -169,7 +169,11 @@ namespace Degausser.Utils
             var sb = new StringBuilder();
             foreach (var fullchar in str)
             {
-                if (fullchar < 0x7f || fullchar > 0x3000 || "•…※、。「」〒".Contains(fullchar))
+                if ("•…※、。「」〒".Contains(fullchar))
+                {
+                    sb.Append(fullchar);
+                }
+                else if (fullchar < 0x7F || (fullchar > 0x3040 && fullchar < 0x3100) || fullchar > 0xFF00)
                 {
                     var c = fullchar.ToString().ToLower().Normalize(NormalizationForm.FormKD)[0];
                     if (c >= 'ぁ' && c <= 'ゔ')
