@@ -169,11 +169,15 @@ namespace Degausser.Utils
             var sb = new StringBuilder();
             foreach (var fullchar in str)
             {
-                if ("•…※、。「」〒".Contains(fullchar))
+                if (fullchar == 'ー')
+                {
+                    sb.Append(kanaGroups.Single(g => g.Contains(sb[sb.Length - 1]))[0]);
+                }
+                else if ("•…※、。「」〒".Contains(fullchar))
                 {
                     sb.Append(fullchar);
                 }
-                else if (fullchar < 0x7F || (fullchar > 0x3040 && fullchar < 0x3100) || fullchar > 0xFF00)
+                else if (fullchar < 0x7F || (fullchar > 0x3040 && fullchar < 0x30FB) || fullchar > 0xFF00)
                 {
                     var c = fullchar.ToString().ToLower().Normalize(NormalizationForm.FormKD)[0];
                     if (c >= 'ぁ' && c <= 'ゔ')
@@ -191,10 +195,6 @@ namespace Degausser.Utils
                     else if (c == 'ヶ')
                     {
                         c = 'ケ';
-                    }
-                    else if (c == 'ー')
-                    {
-                        c = kanaGroups.Single(g => g.Contains(sb[sb.Length - 1]))[0];
                     }
                     sb.Append(c);
                 }
