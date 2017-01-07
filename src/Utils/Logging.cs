@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Diagnostics;
 
-namespace Degausser.Utils
+namespace Degausser
 {
     static class Logging
     {
         public static event EventHandler<string> OnMessage;
 
-        public static void Log(Exception e)
-        {
-            Log(e.Message);
-        }
+        public static void Log(Exception e) => Log(e.Message);
+        public static void Log(object o) => Log(o.ToString());
 
         public static void Log(string message)
         {
             var timeStampedMessage = $"[{DateTime.Now:HH:mm:ss}] {message}";
             Trace.WriteLine(timeStampedMessage);
-            if (OnMessage != null)
-            {
-                OnMessage(null, timeStampedMessage);
-            }
+            OnMessage?.Invoke(null, timeStampedMessage);
         }
 
         public static void AssertEqual<T>(T item1, T item2, string message)

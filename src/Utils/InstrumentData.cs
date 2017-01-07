@@ -1,11 +1,7 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using Degausser.Properties;
-using System.IO;
-using System.Runtime.InteropServices;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
+using Degausser.Properties;
 
 namespace Degausser
 {
@@ -21,11 +17,6 @@ namespace Degausser
         public static Dictionary<int, Instrument> Instruments = new Dictionary<int, Instrument>();
 
         static InstrumentData()
-        {
-            ParseInstrumentXml();
-        }
-
-        static void ParseInstrumentXml()
         {
             var root = XDocument.Parse(Resources.Instruments).Root;
             foreach (var x in root.Elements("Instrument"))

@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Threading;
-using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace Degausser
 {
     public class MidiPlayer : INotifyPropertyChanged
     {
         [DllImport("winmm.dll")]
-        static extern uint midiOutOpen(out IntPtr lphMidiOut, uint uDeviceID, IntPtr dwCallback, IntPtr dwInstance, uint dwFlags);
+        static extern uint midiOutOpen(out IntPtr lphMidiOut, uint uDeviceID, int dwCallback, int dwInstance, uint dwFlags);
         [DllImport("winmm.dll")]
         static extern uint midiOutShortMsg(IntPtr hMidiOut, int dwMsg);
         [DllImport("winmm.dll")]
@@ -21,13 +23,9 @@ namespace Degausser
         const int MAX_CHANNELS = 10;
         const int MAX_TICKS = 7200;
 
-        public enum MidiPlayerState
-        {
-            Paused, Playing
-        };
-
         enum MessageType
         {
+            StopAllNotes = 0x7B,
             NoteOff = 0x80,
             NoteOn = 0x90,
             Polyphonic = 0xA0,
@@ -36,7 +34,6 @@ namespace Degausser
             Aftertouch = 0xD0,
             PitchWheel = 0xE0
         };
-        const byte StopAllNotes = 0x7B;
 
         static IntPtr MidiOut;
         public static MidiPlayer Instance { get; private set; }
@@ -137,7 +134,7 @@ namespace Degausser
 
             public void Silent()
             {
-                new MidiMessage(MessageType.ControlChange, channel, StopAllNotes, 0).Execute();
+                new MidiMessage(MessageType.ControlChange, channel, (byte)MessageType.StopAllNotes, 0).Execute();
             }
 
             public void Initialize()
@@ -164,16 +161,11 @@ namespace Degausser
             public MidiData(short[] tempo)
             {
                 Tempo = tempo;
-                for (int i = 0; i < Channels.Length; i++)
-                {
-                    Channels[i] = new MidiChannel((byte)i);
-                }
             }
 
             public MidiChannel this[int index] => Channels[index];
             public short[] Tempo { get; }
-            public int Length => Tempo.Length;
-            public MidiChannel[] Channels { get; } = new MidiChannel[MAX_CHANNELS];
+            public List<MidiChannel> Channels { get; } = Enumerable.Range(0, MAX_CHANNELS).Select(i => new MidiChannel((byte)i)).ToList();
 
         }
 
@@ -181,7 +173,7 @@ namespace Degausser
         public MidiPlayer()
         {
             Instance = this;
-            midiOutOpen(out MidiOut, 0, IntPtr.Zero, IntPtr.Zero, 0);
+            midiOutOpen(out MidiOut, 0,0, 0, 0);
             for (int i = 0; i < MAX_CHANNELS; i++)
             {
                 midiData.Channels[i].InstrumentName = $"Instrument {i}";
@@ -212,13 +204,13 @@ namespace Degausser
 
         public double TempoModifier { get; set; }
 
-        public MidiPlayerState State { get; set; }
+        public bool IsPlaying { get; set; }
 
         public void SilentAll()
         {
-            for (int i = 0; i < 8; i++)
+            foreach (var ch in midiData.Channels)
             {
-                midiData.Channels[i].Silent();
+                ch.Silent();
             }
         }
 
@@ -236,45 +228,32 @@ namespace Degausser
             }
         }
 
-        public int Length
-        {
-            get
-            {
-                if (midiData == null) return 0;
-                return midiData.Length;
-            }
-        }
+        public int Length => midiData?.Tempo.Length ?? 0;
 
         public void Play(MidiData midiData)
         {
-            State = MidiPlayerState.Paused;
+            IsPlaying = false;
             while (thread != null && thread.IsAlive) ;
             this.midiData = midiData;
             Position = 0;
-            TempoModifier = 0;
             Play();
             NotifyPropertyChanged(nameof(Length));
             NotifyPropertyChanged(nameof(Channels));
-            NotifyPropertyChanged(nameof(TempoModifier));
         }
 
         public void Play()
         {
-            switch (State)
+            if (IsPlaying) return;
+            IsPlaying = true;
+            thread = new Thread(MainLoop)
             {
-                case MidiPlayerState.Playing:
-                    return;
-                case MidiPlayerState.Paused:
-                    State = MidiPlayerState.Playing;
-                    thread = new Thread(MainLoop);
-                    thread.IsBackground = true;
-                    thread.Priority = ThreadPriority.AboveNormal;
-                    thread.Start();
-                    break;
-            }
+                IsBackground = true,
+                Priority = ThreadPriority.AboveNormal
+            };
+            thread.Start();
         }
 
-        public MidiChannel[] Channels => midiData.Channels;
+        public List<MidiChannel> Channels => midiData.Channels;
 
         // The main loop that runs the MIDI playback
         void MainLoop()
@@ -285,13 +264,12 @@ namespace Degausser
             }
 
             long nextTick = 0;
-            while (State == MidiPlayerState.Playing && position < Length)
+            while (IsPlaying && position < Length)
             {
                 long currentTick = DateTime.Now.Ticks;
                 if (currentTick >= nextTick)
                 {
-                    double actualTempoModifier = Math.Pow(2, TempoModifier);
-                    nextTick = currentTick + TimeSpan.TicksPerMinute / (long)(midiData.Tempo[position] * 12 * actualTempoModifier);
+                    nextTick = currentTick + TimeSpan.TicksPerMinute / (long)(midiData.Tempo[position] * 12);
                     foreach (var c in midiData.Channels)
                     {
                         if (c.IsActive)
@@ -305,18 +283,11 @@ namespace Degausser
                 Thread.Sleep(1);
             }
             SilentAll();
-            State = MidiPlayerState.Paused;
+            IsPlaying = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(String info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
-        }
+        private void NotifyPropertyChanged(string info) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
 
 
     }

@@ -13,7 +13,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
 using System.Globalization;
-using Degausser.Utils;
 using Microsoft.Win32;
 
 namespace Degausser
@@ -36,22 +35,16 @@ namespace Degausser
         public MainWindow()
         {
             InitializeComponent();
-
-            //SetTestDirectory();
-            //CompareSomeKnownSimilarFiles();
-            //LookForSimilarSongs();
-            //TestBDXAssertions();
-
-
-
-            //Directory.SetCurrentDirectory(@"C:\Users\Adib\Documents\Daigasso\BDX Mega Pack 2.4");
-
             Logging.OnMessage += (s, e) => Dispatcher.BeginInvoke(new Action(() =>
             {
                 txtLogView.AppendText($"{e}\n");
                 txtLogView.ScrollToEnd();
             }));
             Logging.Log($"Current directory: {Directory.GetCurrentDirectory()}");
+
+            // Hacking tests
+            //VariousBinTests();
+            //KaraokeTest();
 
             Refresh(this, null); // populate library
 
@@ -75,7 +68,7 @@ namespace Degausser
 
             MidiPlayer.Instance.PropertyChanged += (s, e) =>
             {
-                if (e.PropertyName == "Position")
+                if (e.PropertyName == "Position" && karaoke.IsEnabled)
                 {
                     Dispatcher.BeginInvoke(new Action(() => UpdateKaraoke()));
                 }
@@ -94,7 +87,7 @@ namespace Degausser
         void PlayItem(BBPRecord record)
         {
             if (record == null) return;
-            karaoke = new Karaoke(record.bbp);
+            karaoke = new Karaoke(record.gak);
             karaokeEffect.PositionStart = 0;
             karaokeEffect.PositionCount = 0;
             karaokeViewer.ScrollToTop();
@@ -104,13 +97,16 @@ namespace Degausser
 
         void UpdateKaraoke()
         {
-            if (karaoke.IsEnabled)
-            {
-                karaoke.Position = MidiPlayer.Instance.Position;
-                karaokeEffect.PositionStart = karaoke.PositionStart;
-                karaokeEffect.PositionCount = karaoke.PositionCount;
-                //karaokeFraction.Offset = karaoke.PositionFraction; // causes lag??
-            }
+            karaoke.Position = MidiPlayer.Instance.Position;
+            karaokeEffect.PositionStart = karaoke.PositionStart;
+            karaokeEffect.PositionCount = karaoke.PositionCount;
+            karaokeFraction.Offset = karaoke.PositionFraction; // causes lag??
+        }
+
+        void SaveAndReopen()
+        {
+            jbManager.Save();
+            Open(jbManager.FilePath);
         }
 
         void Open(string path)
@@ -121,13 +117,13 @@ namespace Degausser
             Logging.Log($"Opened {path}");
 
             var lst = new List<BBPRecord>();
-            for (int i = 0; i < jbManager.mgr.Items.Length; i++)
+            for (int i = 0; i < jbManager.mgr.items.Length; i++)
             {
-                var item = jbManager.mgr.Items[i];
-                if (item.ID != 0xFFFFFFFF && item.Flags.OnSD)
+                var item = jbManager.mgr.items[i];
+                if (item.titleID != 0xFFFFFFFF && item.flags.OnSD)
                 {
-                    var idPath = Path.Combine(jbManager.Directory, $"gak\\{item.ID:x8}\\pack");
-                    lst.Add(new BBPRecord(item, idPath, i));
+                    var idPath = Path.Combine(jbManager.Directory, $"gak\\{item.titleID:x8}\\pack");
+                    lst.Add(BBPRecord.FromJbMgr(item, idPath, i));
                 }
             }
             lstSaveEditor.ItemsSource = lst;
@@ -155,49 +151,46 @@ namespace Degausser
             else
             {
                 var mgr = jbManager.mgr;
-                var set = new HashSet<uint>(mgr.Items.Select(x => x.ID));
+                var set = new HashSet<uint>(mgr.items.Select(x => x.titleID));
                 var items = lstMediaLibrary.SelectedItems.Cast<BBPRecord>().Select(record =>
                 {
                     try
                     {
-                        int n = Enumerable.Range(0, 3700).First(i => mgr.Items[i].ID == 0xFFFFFFFF);
+                        int n = Enumerable.Range(0, 3700).First(i => mgr.items[i].titleID == 0xFFFFFFFF);
 
                         var item = record.mgrItem;
                         byte[] packdata;
-                        if ((item.ID >> 16) == 0x8000)
+                        if ((item.titleID >> 16) == 0x8000)
                         {
                             var newID = Enumerable.Range(0, 65536).Select(i => (uint)(i + 0x80000000)).First(i => !set.Contains(i));
-                            item.ID = newID;
-                            record.bbp.titleID = (int)newID;
+                            item.titleID = newID;
+                            record.gak.titleID = (int)newID;
                         }
-                        else if (set.Contains(item.ID))
+                        else if (set.Contains(item.titleID))
                         {
-                            return JbMgrFormat.JbMgrItem.Empty;
+                            return JbMgr.Item.Empty;
                         }
 
-                        packdata = record.bbp.StructToArray();
-                        var idPath = Path.Combine(jbManager.Directory, $"gak\\{item.ID:x8}\\");
+                        packdata = record.gak.StructToArray();
+                        var idPath = Path.Combine(jbManager.Directory, $"gak\\{item.titleID:x8}\\");
                         Directory.CreateDirectory(idPath);
                         record.SaveAsPackFile(Path.Combine(idPath, "pack"));
-                        mgr.Items[n] = item;
-                        set.Add(item.ID);
+                        mgr.items[n] = item;
+                        set.Add(item.titleID);
 
                         return item;
                     }
                     catch (IOException)
                     {
-                        return JbMgrFormat.JbMgrItem.Empty;
+                        return JbMgr.Item.Empty;
                     }
                 })
                 .ToList();
 
-                var count = items.Count(item => item.ID != 0xFFFFFFFF);
+                var count = items.Count(item => item.titleID != 0xFFFFFFFF);
 
-                jbManager.Save();
-                Open(jbManager.FilePath);
-                //mgr.Write(mgrpath);
-                //mgr.Write(Path.Combine(Path.GetDirectoryName(mgrpath), "mgr_.bin"));
-                //OpenMgrBin(frm, mgrpath);
+                SaveAndReopen();
+
                 if (count == lstMediaLibrary.SelectedItems.Count)
                 {
                     Logging.Log($"Successfully imported all {count} songs");
@@ -207,7 +200,7 @@ namespace Degausser
                     Logging.Log($"Only managed to import {count} of {lstMediaLibrary.SelectedItems.Count} songs. The following files had errors:");
                     foreach (var pair in lstMediaLibrary.SelectedItems.Cast<BBPRecord>().Zip(items, Tuple.Create))
                     {
-                        if (pair.Item2.ID == 0xFFFFFFFF)
+                        if (pair.Item2.titleID == 0xFFFFFFFF)
                         {
                             Logging.Log($"- {pair.Item1.FullPath}");
                         }
@@ -234,9 +227,9 @@ namespace Degausser
                     try
                     {
                         var item = record.mgrItem;
-                        string bbpPath = Path.Combine("Ripped", $"{item.Title.Replace("\n", "")} ({item.Author}).bbp".IOFriendly());
+                        string bbpPath = Path.Combine("Ripped", $"{item.title.Replace("\n", "")} ({item.author}).bbp".IOFriendly());
                         record.SaveAsBBPFile(bbpPath);
-                        ((List<BBPRecord>)lstMediaLibrary.ItemsSource).Add(new BBPRecord(bbpPath));
+                        ((List<BBPRecord>)lstMediaLibrary.ItemsSource).Add(BBPRecord.FromBBP(bbpPath));
                         return false;
                     }
                     catch (IOException)
@@ -254,13 +247,10 @@ namespace Degausser
         {
             lstMediaLibrary.ItemsSource = null;
             lstMediaLibrary.IsEnabled = false;
-            var paths = (from path in Directory.EnumerateFiles(Directory.GetCurrentDirectory(), "*.*", SearchOption.AllDirectories)
-                         let ext = path.Substring(path.Length - 4).ToLower()
-                         where ext == ".bdx" || ext == ".bbp" || ext == ".bin"
-                         select path).ToList();
-            lstMediaLibrary.Items.Add(new { Filename = $"Populating list... please wait (approximately {paths.Count} items)" });
+            var paths = Directory.GetFiles(Directory.GetCurrentDirectory(), "*.bbp", SearchOption.AllDirectories);
+            lstMediaLibrary.Items.Add(new { Filename = $"Populating list... please wait (approximately {paths.Length} items)" });
 
-            Task.Factory.StartNew(() => (from path in paths select new BBPRecord(path)).SkipExceptions(true).ToList())
+            Task.Factory.StartNew(() => paths.Select(BBPRecord.FromBBP).SkipExceptions(true).ToList())
                 .ContinueWith(t =>
                 {
                     lstMediaLibrary.Items.Clear();
@@ -272,9 +262,9 @@ namespace Degausser
 
         void PlayPause(object s, RoutedEventArgs e)
         {
-            if (MidiPlayer.Instance.State == MidiPlayer.MidiPlayerState.Playing)
+            if (MidiPlayer.Instance.IsPlaying)
             {
-                MidiPlayer.Instance.State = MidiPlayer.MidiPlayerState.Paused;
+                MidiPlayer.Instance.IsPlaying = false;
             }
             else
             {
@@ -284,11 +274,7 @@ namespace Degausser
 
         void Delete()
         {
-            if (jbManager == null)
-            {
-                return;
-            }
-            else if (lstSaveEditor.SelectedItems.Count == 0)
+            if (jbManager == null || lstSaveEditor.SelectedItems.Count == 0)
             {
                 return;
             }
@@ -297,9 +283,9 @@ namespace Degausser
             {
                 try
                 {
-                    var idPath = Path.Combine(jbManager.Directory, $"gak\\{record.mgrItem.ID:x8}");
+                    var idPath = Path.Combine(jbManager.Directory, $"gak\\{record.mgrItem.titleID:x8}");
                     Directory.Delete(idPath, true);
-                    jbManager.mgr.Items[record.Slot] = JbMgrFormat.JbMgrItem.Empty;
+                    jbManager.mgr.items[record.Slot] = JbMgr.Item.Empty;
                     return true;
                 }
                 catch (IOException)
@@ -308,10 +294,9 @@ namespace Degausser
                     return false;
                 }
             });
-            jbManager.Save();
 
+            SaveAndReopen();
             Logging.Log($"Deleted {count} of {lstSaveEditor.SelectedItems.Count} records");
-            Open(jbManager.FilePath);
         }
     }
 }

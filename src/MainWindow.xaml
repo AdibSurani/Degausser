@@ -80,8 +80,6 @@
                         <Slider Value="{Binding Source={StaticResource MPlayer}, Path=Position, Mode=TwoWay}" Maximum="{Binding Source={StaticResource MPlayer}, Path=Length, Mode=OneWay}" LargeChange="48" SmallChange="12" Grid.Column="1" Grid.Row="0" IsSnapToTickEnabled="False" />
                         <TextBlock Text="Volume:" Grid.Column="0" Grid.Row="1" VerticalAlignment="Top" Padding="3"/>
                         <Slider Grid.Column="1" Grid.Row="1" Value="{Binding Source={StaticResource MPlayer}, Path=Volume, Mode=TwoWay}" Maximum="65535" LargeChange="1000" SmallChange="100" />
-                        <TextBlock Text="Tempo:" Grid.Column="0" Grid.Row="2" VerticalAlignment="Top" Padding="3"/>
-                        <Slider Grid.Column="1" Grid.Row="2" Value="{Binding Source={StaticResource MPlayer}, Path=TempoModifier, Mode=TwoWay}" Maximum="1" Minimum="-1" IsSnapToTickEnabled="False" IsMoveToPointEnabled="False" />
                     </Grid>
                     <ListBox Margin="3" Name="lstInstruments" DockPanel.Dock="Top" ItemsSource="{Binding Source={StaticResource MPlayer}, Path=Channels}">
                         <ListBox.ItemTemplate>

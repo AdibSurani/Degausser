@@ -23,7 +23,7 @@
   <Instrument ID="13" Name="Acoustic Bass" Type="SCL" Midi="32"/>
   <Instrument ID="14" Name="Strings" Type="SCL" Midi="44"/>
   <Instrument ID="15" Name="Violin" Type="SCL" Midi="40"/>
-  <Instrument ID="16" Name="Double Bass" Type="SCL" Midi="43"/> <!-- Contrabass -->
+  <Instrument ID="16" Name="Double Bass" Type="SCL" Midi="43"/>
   <Instrument ID="17" Name="Harp" Type="SCL" Midi="46"/>
   <Instrument ID="18" Name="Pizzicato Violin" Type="SCL" Midi="45"/>
   <Instrument ID="19" Name="Piccolo" Type="SCL" Midi="72"/>
@@ -48,16 +48,16 @@
   <Instrument ID="38" Name="Shamisen" Type="SCL" Midi="106"/>
   <Instrument ID="39" Name="Koto" Type="SCL" Midi="107"/>
   <Instrument ID="40" Name="Shakuhachi" Type="SCL" Midi="77"/>
-  <Instrument ID="41" Name="NES" Type="SCL" Midi="87"/> <!-- Famicom A -->
+  <Instrument ID="41" Name="NES A" Type="SCL" Midi="87"/>
 
   <!-- DRM Instruments -->
-  <Instrument ID="42" Name="Rock Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/> <!-- Normal Drums -->
+  <Instrument ID="42" Name="Rock Drums" Type="DRM" Midi="0,38,35,37,54,42,48,47,50,46,57"/>
   <Instrument ID="43" Name="Electronic Drums" Type="DRM" Midi="0,40,35,51,54,42,48,47,50,46,57"/>
   <Instrument ID="44" Name="Synth Drums" Type="DRM" Midi="0,40,35,29,54,42,48,47,50,46,57"/>
-  <Instrument ID="45" Name="Percussion Set" Type="DRM" Midi="0,38,41,81,58,52,54,38,54,55,57"/> <!-- Orchestral Drums -->
+  <Instrument ID="45" Name="Percussion Set" Type="DRM" Midi="0,38,41,81,58,52,54,38,54,55,57"/>
   <Instrument ID="46" Name="Bongo Set" Type="DRM" Midi="0,60,61,80,81,54,75,39,69,66,65"/>
   <Instrument ID="47" Name="Conga Set" Type="DRM" Midi="0,63,64,62,58,55,82,85,56,77,76"/>
-  <Instrument ID="48" Name="Japanese Percussion Set" Type="DRM" Midi="0,62,54,64,55,59,56,62,64,60,61"/> <!-- Wadaiko Set -->
+  <Instrument ID="48" Name="Japanese Percussion Set" Type="DRM" Midi="0,62,54,64,55,59,56,62,64,60,61"/>
 
   <!-- GT and KB Instruments -->
   <InstrumentRange ID="49-89" Type="GT" Offset="-48"/>
@@ -84,13 +84,13 @@
   <Instrument ID="162" Name="Synth Pad" Type="SCL" Midi="0"/>
   <Instrument ID="163" Name="Fat Lead" Type="SCL" Midi="0"/>
   <Instrument ID="164" Name="Sine" Type="SCL" Midi="0"/>
-  <Instrument ID="165" Name="Famicom B" Type="SCL" Midi="0"/>
-  <Instrument ID="166" Name="Famicom C" Type="SCL" Midi="0"/>
-  <Instrument ID="167" Name="Famicom Bass" Type="SCL" Midi="0"/>
+  <Instrument ID="165" Name="NES B" Type="SCL" Midi="0"/>
+  <Instrument ID="166" Name="NES C" Type="SCL" Midi="0"/>
+  <Instrument ID="167" Name="NES Bass" Type="SCL" Midi="0"/>
   <Instrument ID="168" Name="Orchestra Hit" Type="SCL" Midi="0"/>
   <Instrument ID="169" Name="Tenor Sax" Type="SCL" Midi="0"/>
   <Instrument ID="170" Name="Cello" Type="SCL" Midi="0"/>
-  <Instrument ID="171" Name="Bassoon" Type="SCL" Midi="0"/> <!-- Fagotto -->
+  <Instrument ID="171" Name="Bassoon" Type="SCL" Midi="0"/>
 
   <!-- BBP GT and KB Instruments -->
   <InstrumentRange ID="172-182" Type="GT" Offset="-11"/>

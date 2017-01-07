@@ -5,106 +5,82 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Diagnostics;
-using Degausser.Utils;
-using static Degausser.Utils.GZip;
 
 namespace Degausser
 {
     class BBPRecord
     {
         // Quick information
-        public string FullPath { get; }
+        public string FullPath { get; private set; }
         public string Filename => Path.GetFileName(FullPath);
         public string Folder => Path.GetFileName(Path.GetDirectoryName(FullPath));
-        public string Title => mgrItem.Title.Replace("\n", "");
-        public string Author => mgrItem.Author;
-        public bool HasKaraoke => mgrItem.Flags.HasLyrics;
-        public bool HasGuitar => mgrItem.Flags.HasGuitar;
-        public bool HasPiano => mgrItem.Flags.HasPiano;
-        public int Lines => bbp.linesPlus6 - 6;
-        public int Instruments => bbp.channelInfo.Count(c => c.instrument != 0);
-        public int Slot { get; }
+        public string Title => mgrItem.title.Replace("\n", "");
+        public string Author => mgrItem.author;
+        public bool HasKaraoke => mgrItem.flags.HasLyrics;
+        public bool HasGuitar => mgrItem.flags.HasGuitar;
+        public bool HasPiano => mgrItem.flags.HasPiano;
+        public int Lines => gak.linesPlus6 - 6;
+        public int Instruments => gak.channelInfo.Count(c => c.instrument != 0);
+        public int Slot { get; private set; }
 
         // A very quick hash function for testing purposes
-        public string Hash => $"{QuickHash(bbp.StructToArray()) ^ QuickHash(mgrItem.StructToArray()):X16}";
+        public string Hash => $"{QuickHash(gak.StructToArray()) ^ QuickHash(mgrItem.StructToArray()):X16}";
         long QuickHash(byte[] buffer) => buffer.Aggregate((long)17, (hash, b) => hash * 23 + b);
 
-        public JbMgrFormat.JbMgrItem mgrItem;
-        public BBPFormat bbp;
-        public byte[] vocaloid; // uncompressed
+        public JbMgr.Item mgrItem;
+        public Gak gak;
+        public byte[] vocaloid;
 
         // From known item and packpath
-        public BBPRecord(JbMgrFormat.JbMgrItem item, string path, int slot)
+        public static BBPRecord FromJbMgr(JbMgr.Item item, string path, int slot)
         {
-            Slot = slot;
-            FullPath = path;
-            mgrItem = item;
-            if (item.Flags.OnSD)
+            return new BBPRecord(File.ReadAllBytes(path))
             {
-                var buffer = File.ReadAllBytes(path);
-                var bytes = buffer;
-                var nums = Enumerable.Range(0, 17).Select(i => BitConverter.ToInt32(bytes, i * 4)).ToList();
-
-                var unc1 = Decompress(bytes, nums[3], nums[4]);
-                bbp = unc1.ToStruct<BBPFormat>();
-                if (nums[5] == 1) vocaloid = Decompress(bytes, nums[7], nums[8]);
-            }
-            else
-            {
-                bbp = new BBPFormat
-                {
-                    title = item.Title.StringToArray(250),
-                    channelInfo = new BBPFormat.ChannelInfo[0]
-                };
-            }
+                FullPath = path,
+                mgrItem = item,
+                Slot = slot
+            };
         }
 
-        // From a file
-        public BBPRecord(string path)
+        // From a BBP file
+        public static BBPRecord FromBBP(string path)
         {
-            FullPath = path;
-            if (Path.GetExtension(path).ToLower() == ".bin")
+            var buffer = File.ReadAllBytes(path);
+            return new BBPRecord(buffer, 312)
             {
-                BIN2BBP.Convert(path, out mgrItem, out bbp, out vocaloid);
-            }
-            else if (Path.GetExtension(path).ToLower() == ".bdx")
-            {
-                var bytes = File.ReadAllBytes(path);
-                if (bytes.Length != 32768)
-                {
-                    throw new InvalidDataException($"{path} has an incorrect filesize!");
-                }
-                var bdx = bytes.ToStruct<BDXFormat>();
-                bbp = BDX2BBP.Convert(bdx, out mgrItem);
-                //mgrItem = new JbMgrFormat.JbMgrItem() { Author = bdx.contributor.ToString() };
-            }
-            else
-            {
-                var buffer = File.ReadAllBytes(path);
-                mgrItem = buffer.Take(312).ToArray().ToStruct<JbMgrFormat.JbMgrItem>();
-                var bytes = buffer.Skip(312).ToArray();
-                var nums = Enumerable.Range(0, 17).Select(i => BitConverter.ToInt32(bytes, i * 4)).ToList();
+                FullPath = path,
+                mgrItem = buffer.ToStruct<JbMgr.Item>()
+            };
+        }
 
-                var unc1 = Decompress(bytes, nums[3], nums[4]);
-                bbp = unc1.ToStruct<BBPFormat>();
-                if (nums[5] == 1) vocaloid = Decompress(bytes, nums[7], nums[8]);
-            }
+        // From a "pack" file
+        public static BBPRecord FromPack(string path)
+        {
+            return new BBPRecord(File.ReadAllBytes(path))
+            {
+                FullPath = path
+            };
+        }
+
+        BBPRecord(byte[] bytes, int offset = 0)
+        {
+            var nums = Enumerable.Range(0, 17).Select(i => BitConverter.ToInt32(bytes, i * 4 + offset)).ToList();
+            gak = bytes.Decompress(nums[3] + offset, nums[4]).ToStruct<Gak>();
+            if (nums[5] == 1) vocaloid = bytes.Decompress(nums[7] + offset, nums[8]);
         }
 
         public void SaveAsBBPFile(string path)
         {
             var item = mgrItem;
-            item.Scores = new byte[50];
-            item.Singer = JbMgrFormat.JbMgrItem.JbSinger.None;
-            item.Icon = JbMgrFormat.JbMgrItem.JbIcon.None;
-            item.Flags.flag &= 0x7FDFFF;
-            var itemData = item.StructToArray();
-            var packData = Recompile();
+            item.scores = new byte[50];
+            item.singer = JbMgr.Item.JbSinger.None;
+            item.icon = JbMgr.Item.JbIcon.None;
+            item.flags.flag &= 0x7FDFFF;
 
-            using (var fo = File.Open(path, FileMode.Create))
+            using (var bw = new BinaryWriter(File.Create(path)))
             {
-                fo.Write(itemData, 0, itemData.Length);
-                fo.Write(packData, 0, packData.Length);
+                bw.Write(item.StructToArray());
+                bw.Write(Recompile());
             }
         }
 
@@ -115,11 +91,11 @@ namespace Degausser
 
         public byte[] Recompile()
         {
-            var unc1 = bbp.StructToArray();
+            var unc1 = gak.StructToArray();
             var unc2 = vocaloid;
             byte[] result;
 
-            var c1 = Compress(unc1);
+            var c1 = unc1.Compress();
             var nums = new int[17];
             nums[0] = 0x20001;
             nums[1] = 1;
@@ -134,7 +110,7 @@ namespace Degausser
             else
             {
                 int c1len4 = (c1.Length + 3) & ~3;
-                var c2 = Compress(unc2);
+                var c2 = unc2.Compress();
                 nums[5] = 1;
                 nums[6] = unc2.Length;
                 nums[7] = 68 + c1len4;
@@ -163,7 +139,7 @@ namespace Degausser
 
         public string GetInstrumentName(int chanNumber)
         {
-            var c = bbp.channelInfo[chanNumber];
+            var c = gak.channelInfo[chanNumber];
             int u = c.instrument;
             if (u == 0) return "(Blank)";
             string clone = c.cloneID > 0 ? " " + c.cloneID : null;
@@ -196,18 +172,18 @@ namespace Degausser
 
         void SetUpMidi()
         {
-            midiData = new MidiPlayer.MidiData(ChangeTracker(bbp.tempoChanges, Lines * 48).ToArray());
+            midiData = new MidiPlayer.MidiData(ChangeTracker(gak.tempoChanges, Lines * 48).ToArray());
 
             for (int i = 0; i < 10; i++)
             {
                 // volume as well??
-                var volume = (from item in ChangeTracker(bbp.volumeChanges[i].changes, Lines * 48)
-                              let vol = item * bbp.channelInfo[i].volume * (bbp.masterVolumeMaybe + 64)
+                var volume = (from item in ChangeTracker(gak.volumeChanges[i].changes, Lines * 48)
+                              let vol = item * gak.channelInfo[i].volume * (gak.masterVolumeMaybe + 64)
                               select (byte)Math.Min(127, vol >> 14))
                               .ToList();
 
                 var c = midiData.Channels[i];
-                var info = bbp.channelInfo[i];
+                var info = gak.channelInfo[i];
                 var instr = InstrumentData.Instruments[info.instrument];
                 c.InstrumentMidi = instr.Midi;
                 c.InstrumentName = instr.Name;
@@ -223,7 +199,7 @@ namespace Degausser
                 List<IndexRootPair> pianoTracker;
                 if (info.playType == PlayType.Piano)
                 {
-                    var pianoChordSegment = new ArraySegment<TimeValuePair>(bbp.pianoChordChangeTable, 0, bbp.pianoChordChangesCount);
+                    var pianoChordSegment = new ArraySegment<TimeValuePair>(gak.pianoChordChangeTable, 0, gak.pianoChordChangesCount);
                     pianoTracker = (from val in ChangeTracker(pianoChordSegment, Lines * 48)
                                     select new IndexRootPair { index = val.HiByte(), rawRoot = val.LoByte() })
                                     .ToList();
@@ -249,8 +225,8 @@ namespace Degausser
                         }
                     };
 
-                    var seg = new ArraySegment<byte>(bbp.channelNotes[i].notes, j * 4, 4);
-                    switch (bbp.channelInfo[i].playType)
+                    var seg = new ArraySegment<byte>(gak.channelNotes[i].notes, j * 4, 4);
+                    switch (gak.channelInfo[i].playType)
                     {
                         case PlayType.Standard:
                             DoThreeIf(0xFF, seg, c.ReleaseNote, c.AddNote);

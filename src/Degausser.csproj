@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Degausser</RootNamespace>
     <AssemblyName>Degausser</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -42,15 +42,15 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -61,14 +61,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BBPRecord.cs" />
-    <Compile Include="File Formats\BBPFormat.cs" />
-    <Compile Include="File Formats\BDX2BBP.cs" />
-    <Compile Include="File Formats\BDXFormat.cs" />
-    <Compile Include="BDXRecordInfo.cs" />
-    <Compile Include="BDXRecordMidi.cs" />
-    <Compile Include="File Formats\BIN2BBP.cs" />
-    <Compile Include="File Formats\Common.cs" />
-    <Compile Include="File Formats\JbMgrFormat.cs" />
+    <Compile Include="File Formats\JbMgr2.cs" />
+    <Compile Include="File Formats\MvMgr.cs" />
+    <Compile Include="File Formats\Gak.cs" />
+    <Compile Include="File Formats\JbMgr.cs" />
+    <Compile Include="File Formats\SingerMgr.cs" />
+    <Compile Include="File Formats\SingerMgr2.cs" />
     <Compile Include="HackingTests.cs" />
     <Compile Include="JbManager.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -76,14 +74,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Utils\GZip.cs" />
     <Compile Include="Utils\InstrumentData.cs" />
     <Compile Include="Karaoke.cs" />
-    <Compile Include="MidiPlayer.cs" />
+    <Compile Include="Utils\MidiPlayer.cs" />
     <Compile Include="SortableListView.xaml.cs">
       <DependentUpon>SortableListView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\InteropExtensions.cs" />
+    <Compile Include="Utils\IOExtensions.cs" />
     <Compile Include="Utils\Language.cs" />
     <Compile Include="Utils\Logging.cs" />
     <Page Include="MainWindow.xaml">

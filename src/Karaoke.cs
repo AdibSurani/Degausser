@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Text;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 
 namespace Degausser
 {
     class Karaoke
     {
-        const int MaxSyllableLength = 96;
+        const int MaxSyllableLength = 48;
         readonly List<int> timer;
 
         public string Lyrics { get; }
@@ -28,17 +23,13 @@ namespace Degausser
             IsEnabled = false;
         }
 
-        public Karaoke(BBPFormat bbp)
+        public Karaoke(Gak bbp) : this()
         {
             if (IsEnabled = bbp.karaokeTimer[0] != 0x3FFF)
             {
-                Lyrics = bbp.karaokeLyrics.ArrayToString();
+                Lyrics = bbp.karaokeLyrics;
                 timer = bbp.karaokeTimer.Select(t => t & 0x3FFF).ToList();
                 maxTicks = (bbp.linesPlus6 - 6) * 48;
-            }
-            else
-            {
-                Lyrics = "(no karaoke)";
             }
         }
 
@@ -68,6 +59,60 @@ namespace Degausser
                 PositionCount = right - left;
                 PositionFraction = frac;
             }
+        }
+
+        public static short[] Retime(List<string> lst, short[] orig)
+        {
+            return Retime(lst.Zip(orig.Where(t => (t & 0xC000) == 0x8000), Tuple.Create));
+        }
+
+        public static short[] Retime(IEnumerable<Tuple<string, short>> src)
+        {
+            var timer = new List<short>();
+            var prev = Tuple.Create("", (short)0);
+            foreach (var curr in src)
+            {
+                var length = Math.Min(curr.Item2 - prev.Item2, MaxSyllableLength);
+                var cnt = prev.Item1.Count(c => !char.IsWhiteSpace(c));
+                int i = 0;
+                timer.AddRange(prev.Item1.Select(c => (short)(char.IsWhiteSpace(c) ? timer.Last() | 0x4000 : prev.Item2 + length * i++ / cnt)));
+                prev = curr;
+            }
+            foreach (var c in prev.Item1)
+            {
+                timer.Add(prev.Item2);
+                if (char.IsWhiteSpace(c)) timer[timer.Count - 1] |= 0x4000;
+            }
+            return timer.Concat(Enumerable.Repeat((short)0x3FFF, 3000 - timer.Count)).ToArray();
+        }
+
+        public static short[] Retime(string str, List<TimeValuePair> lst)
+        {
+            var timer = Enumerable.Repeat((short)0x3FFF, 3000).ToArray();
+
+            for (int i = 0; i < lst.Count - 1; i++)
+            {
+                var prev = lst[i];
+                var next = i < lst.Count ? lst[i + 1]
+                    : new TimeValuePair { time = prev.time, value = (short)str.Length }; // extrapolate (repeat) the last item
+
+                // interpolate in between
+                var interp = Enumerable.Range(prev.value, next.value - prev.value).Where(j => !char.IsWhiteSpace(str[j])).ToList();
+                var length = Math.Min(next.time - prev.time, 48);
+                for (int j = 0; j < interp.Count; j++)
+                {
+                    timer[interp[j]] = (short)(prev.time + length * j / interp.Count);
+                }
+            }
+
+            // finally, fill in all the whitespace
+            for (int i = 0, lasttime = 0x4000; i < str.Length; i++)
+            {
+                if (char.IsWhiteSpace(str[i])) timer[i] = (short)lasttime;
+                lasttime = timer[i] | 0x4000;
+            }
+
+            return timer;
         }
     }
 }
