@@ -1,0 +1,102 @@
+<Window x:Class="Degausser.SettingsWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Degausser Settings"
+        Width="700" Height="680"
+        MinWidth="620" MinHeight="620"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Icon="/Assets/Degausser.ico">
+  <Grid Margin="20" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,Auto">
+    <StackPanel Grid.Row="0" Margin="0,0,0,20">
+      <TextBlock Text="Settings" FontSize="22" FontWeight="SemiBold" />
+      <TextBlock Text="Changes apply straight away. They are only kept for next time if you tick “Keep these settings between sessions”." Classes="muted" Margin="0,4,0,0" />
+    </StackPanel>
+
+    <Grid Grid.Row="1" Margin="0,0,0,18" ColumnDefinitions="125,*,Auto">
+      <TextBlock Text="Library folder" FontWeight="SemiBold" VerticalAlignment="Center" />
+      <TextBox x:Name="txtLibraryPath" Grid.Column="1" Margin="0,0,8,0" VerticalContentAlignment="Center" />
+      <Button Grid.Column="2" Classes="modern" Content="Browse…" Click="BrowseLibrary" />
+    </Grid>
+
+    <Grid Grid.Row="2" Margin="0,0,0,12" ColumnDefinitions="125,*,Auto">
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="SoundFont" FontWeight="SemiBold" />
+        <TextBlock Text="SF2 playback" Classes="muted" FontSize="10" />
+      </StackPanel>
+      <TextBox x:Name="txtSoundFontPath" Grid.Column="1" Margin="0,0,8,0" PlaceholderText="Choose BBP.sf2 or another GM-compatible .sf2" VerticalContentAlignment="Center" />
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+        <Button Classes="modern" Content="Browse…" Click="BrowseSoundFont" />
+        <Button Classes="modern" Content="Get BBP.sf2" Click="DownloadDefaultSoundFont" ToolTip.Tip="Opens the BBP.sf2 page on musical-artifacts.com (about 42 MB), the SoundFont made for these songs. Download it, then choose it with Browse and press Save." />
+      </StackPanel>
+    </Grid>
+
+    <Grid Grid.Row="3" Margin="0,0,0,18" ColumnDefinitions="125,*,Auto" RowDefinitions="Auto,Auto">
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="Scorefixes" FontWeight="SemiBold" />
+        <TextBlock Text="English lyrics, optional" Classes="muted" FontSize="10" />
+      </StackPanel>
+      <TextBox x:Name="txtScorefixPath" Grid.Column="1" Margin="0,0,8,0" PlaceholderText="A folder of scorefix .txt files (none: songs keep their own lyrics)" ToolTip.Tip="Scorefixes give songs an English title and romaji lyrics. Degausser reads every .txt in this folder, so adding or replacing a file is how you share one. Optional: without them everything else works as usual." VerticalContentAlignment="Center" LostFocus="ScorefixPathLostFocus" />
+      <Button Grid.Column="2" Classes="modern" Content="Browse…" Click="BrowseScorefixes" />
+      <TextBlock x:Name="txtScorefixStatus" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Classes="muted" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0" />
+    </Grid>
+
+    <Grid Grid.Row="4" Margin="0,0,0,18" ColumnDefinitions="125,300,*">
+      <TextBlock Text="SF2 mapping" FontWeight="SemiBold" VerticalAlignment="Center" />
+      <ComboBox x:Name="cmbSoundFontMapping" Grid.Column="1" VerticalContentAlignment="Center">
+        <ComboBoxItem Content="BBP.sf2 faithful (special banks)" />
+        <ComboBoxItem Content="General MIDI / bank 0" />
+      </ComboBox>
+      <TextBlock Grid.Column="2" Text="Faithful mode uses the recovered nonzero banks for Rock Guitar, Sine and NES Bass." Classes="muted" FontSize="10" TextWrapping="Wrap" Margin="12,0,0,0" VerticalAlignment="Center" />
+    </Grid>
+
+    <Grid Grid.Row="5" Margin="0,0,0,16" ColumnDefinitions="125,250,*">
+      <TextBlock Text="Start in" FontWeight="SemiBold" VerticalAlignment="Center" />
+      <ComboBox x:Name="cmbStartupView" Grid.Column="1" VerticalContentAlignment="Center">
+        <ComboBoxItem Content="Last used view" />
+        <ComboBoxItem Content="Now Playing" />
+        <ComboBoxItem Content="3DS Content" />
+      </ComboBox>
+    </Grid>
+
+    <Grid Grid.Row="6" Margin="0,0,0,16" ColumnDefinitions="125,*,Auto">
+      <StackPanel VerticalAlignment="Center">
+        <TextBlock Text="MIDI profile JSON" FontWeight="SemiBold" />
+        <TextBlock Text="Optional override" Classes="muted" FontSize="10" />
+      </StackPanel>
+      <TextBox x:Name="txtMidiProfilePath" Grid.Column="1" Margin="0,0,8,0"
+               PlaceholderText="Built-in Mosgis / BBP.sf2 by default" VerticalContentAlignment="Center" />
+      <Button Grid.Column="2" Classes="modern" Content="Browse…" Click="BrowseMidiProfile" />
+    </Grid>
+
+    <Grid Grid.Row="7" Margin="0,0,0,16" ColumnDefinitions="125,250,*">
+      <TextBlock Text="MIDI text encoding" FontWeight="SemiBold" VerticalAlignment="Center" />
+      <ComboBox x:Name="cmbMidiTextEncoding" Grid.Column="1" VerticalContentAlignment="Center">
+        <ComboBoxItem Content="UTF-8 (default)" />
+        <ComboBoxItem Content="Shift-JIS" />
+      </ComboBox>
+      <TextBlock Grid.Column="2" Margin="12,0,0,0" Text="Separate from mapping profile for compatibility." Classes="muted" FontSize="10" TextWrapping="Wrap" />
+    </Grid>
+
+    <StackPanel Grid.Row="8">
+      <Grid Margin="0,0,0,16" ColumnDefinitions="125,250,*">
+        <StackPanel VerticalAlignment="Center">
+          <TextBlock Text="BDX author" FontWeight="SemiBold" />
+          <TextBlock Text="When a BDX has none" Classes="muted" FontSize="10" />
+        </StackPanel>
+        <TextBox x:Name="txtBdxAuthor" Grid.Column="1" MaxLength="17" PlaceholderText="Degausser 3.0" VerticalContentAlignment="Center" />
+        <TextBlock Grid.Column="2" Margin="12,0,0,0" Text="Up to 17 characters. A BDX that names its author keeps it." Classes="muted" FontSize="10" TextWrapping="Wrap" VerticalAlignment="Center" />
+      </Grid>
+      <CheckBox x:Name="chkRememberWindow" Content="Remember window size and position" VerticalAlignment="Top" Margin="125,2,0,0" />
+      <CheckBox x:Name="chkRememberSettings" Content="Keep these settings between sessions" VerticalAlignment="Top" Margin="125,8,0,0" />
+      <TextBlock Margin="147,2,0,0" Classes="muted" FontSize="10" TextWrapping="Wrap"
+                 Text="Off: Degausser writes nothing to this computer except restore points when you change a save, and starts fresh each time. On: settings and a log are kept in the folder below." />
+    </StackPanel>
+
+    <Grid Grid.Row="9" Margin="0,20,0,0" ColumnDefinitions="*,Auto,Auto">
+      <TextBlock x:Name="txtSettingsPath" VerticalAlignment="Center" Foreground="{DynamicResource MutedTextBrush}" FontSize="11" TextTrimming="CharacterEllipsis" />
+      <Button Grid.Column="1" Classes="modern" Content="Cancel" Width="90" Margin="0,0,8,0" Click="CancelSettings" />
+      <Button Grid.Column="2" Classes="modern primary" Content="Save" Width="90" Click="SaveSettings" />
+    </Grid>
+  </Grid>
+</Window>

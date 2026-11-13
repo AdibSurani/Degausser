@@ -1,0 +1,25 @@
+<Window x:Class="Degausser.RestoreBackupDialog"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Restore save from backup"
+        Width="560" Height="460"
+        MinWidth="440" MinHeight="320"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="18" RowDefinitions="Auto,*,Auto">
+    <StackPanel Margin="0,0,0,12" Spacing="4">
+      <TextBlock Text="Restore points" FontSize="18" FontWeight="SemiBold" />
+      <TextBlock x:Name="txtIntro" Classes="muted" TextWrapping="Wrap" />
+    </StackPanel>
+
+    <ListBox x:Name="lstBackups" Grid.Row="1" SelectionChanged="SelectionChanged" DoubleTapped="RestoreClicked" />
+    <TextBlock x:Name="txtEmpty" Grid.Row="1" Text="No restore points yet. One is made automatically before Degausser changes this save."
+               Classes="muted" TextWrapping="Wrap" TextAlignment="Center" MaxWidth="320"
+               HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False" IsVisible="False" />
+
+    <Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="Auto,*,Auto,Auto">
+      <Button Classes="modern" Content="Open backup folder" Click="OpenFolderClicked" />
+      <Button Grid.Column="2" Classes="modern" Content="Cancel" Click="CancelClicked" Margin="0,0,8,0" />
+      <Button x:Name="btnRestore" Grid.Column="3" Classes="modern primary" Content="Restore" Click="RestoreClicked" IsEnabled="False" />
+    </Grid>
+  </Grid>
+</Window>

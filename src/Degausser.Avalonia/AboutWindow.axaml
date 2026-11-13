@@ -1,0 +1,32 @@
+<Window x:Class="Degausser.AboutWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About Degausser"
+        Width="520" Height="365"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Icon="/Assets/Degausser.ico">
+  <Grid Margin="24" RowDefinitions="Auto,*,Auto">
+    <Grid ColumnDefinitions="92,*">
+      <Image Source="/Assets/Degausser.png" Width="72" Height="72" Stretch="Uniform" VerticalAlignment="Top" />
+      <StackPanel Grid.Column="1" VerticalAlignment="Center">
+        <TextBlock Text="Degausser" FontSize="28" FontWeight="SemiBold" />
+        <TextBlock x:Name="txtVersion" FontSize="14" Foreground="{DynamicResource AccentBrush}" FontWeight="SemiBold" Margin="0,3,0,0" />
+        <TextBlock Text="Band Brothers content manager and player" Classes="muted" Margin="0,5,0,0" />
+      </StackPanel>
+    </Grid>
+
+    <StackPanel Grid.Row="1" Margin="0,24,0,0" Spacing="12">
+      <TextBlock Text="Manage, preview, convert and preserve songs for Daigasso! Band Brothers P." TextWrapping="Wrap" />
+      <TextBlock Text="© 2009-2026 Adib Surani · MIT License · built with open-source components" Classes="muted" TextWrapping="Wrap" />
+      <TextBlock Text="An unofficial fan project. It is not affiliated with or endorsed by Nintendo or Intelligent Systems, and it does not include any songs or game files. Bring your own save and songs." Classes="muted" FontSize="11" TextWrapping="Wrap" />
+      <StackPanel Orientation="Horizontal" Spacing="12" Margin="0,6,0,0">
+        <Button Classes="modern" Content="GitHub repository" Click="OpenGitHub" />
+        <Button Classes="modern" Content="Licenses" Click="OpenLicenses" />
+      </StackPanel>
+    </StackPanel>
+
+    <Button Grid.Row="2" Classes="modern primary" Content="OK" Width="90" HorizontalAlignment="Right" Click="CloseAbout" />
+  </Grid>
+</Window>

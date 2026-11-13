@@ -1,0 +1,31 @@
+<Window x:Class="Degausser.ScorefixDialog"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Apply scorefix"
+        Width="760" Height="620"
+        MinWidth="560" MinHeight="420"
+        WindowStartupLocation="CenterOwner">
+  <Grid Margin="18" RowDefinitions="Auto,*,Auto">
+    <StackPanel Margin="0,0,0,12" Spacing="4">
+      <TextBlock Text="Paste scorefix text" FontSize="18" FontWeight="SemiBold" />
+      <TextBlock x:Name="txtIntro" Text="Paste the complete historical scorefix format. Degausser will validate the romaji against the song's existing Japanese karaoke before changing anything. Brackets around one Japanese character are alignment overrides and aren't shown; brackets that match the Japanese's own （ ） are shown."
+                 TextWrapping="Wrap" Classes="muted" />
+    </StackPanel>
+
+    <TextBox x:Name="txtScorefix" Grid.Row="1"
+             AcceptsReturn="True"
+             TextWrapping="NoWrap"
+             FontFamily="monospace"
+             FontSize="13"
+             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             ScrollViewer.VerticalScrollBarVisibility="Auto"
+             PlaceholderText="800229C8&#10;――――――――――――&#10;Title&#10;――――――――――――&#10;romaji lyrics…" />
+
+    <Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+      <TextBlock Text="For songs opened from 3DS Content, Apply also writes the updated pack and mgr.bin. Library/file previews are changed in memory only."
+                 Classes="muted" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,16,0" />
+      <Button Grid.Column="1" Classes="modern" Content="Cancel" Click="CancelClicked" Margin="0,0,8,0" />
+      <Button Grid.Column="2" Classes="modern primary" Content="Apply" Click="ApplyClicked" />
+    </Grid>
+  </Grid>
+</Window>

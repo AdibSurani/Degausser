@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Degausser.Core</AssemblyName>
+    <RootNamespace>Degausser</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="EndianBinaryIO" Version="2.1.1" />
+    <PackageReference Include="Melanchall.DryWetMidi" Version="8.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Degausser.Core.Tests" />
+    <InternalsVisibleTo Include="Degausser.Corpus" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Midi/Instruments.xml" />
+    <EmbeddedResource Include="Midi/Profiles/*.json" />
+    <EmbeddedResource Include="Translations/english-bbpm-bbpv-v1.json" LogicalName="Degausser.ContentTranslations.EnglishV1" />
+    <EmbeddedResource Include="Catalogue/bbp_catalogue_v3.0.compact.json.gz" />
+  </ItemGroup>
+</Project>

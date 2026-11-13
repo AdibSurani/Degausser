@@ -1,0 +1,52 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'degausser-v*'
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    # One Linux job builds every platform's zip: .NET cross-publishes self-contained single files.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Verify tag matches project version
+        run: |
+          version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -n 1)
+          if [ "$GITHUB_REF_NAME" != "degausser-v$version" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match desktop project version degausser-v$version" >&2
+            exit 1
+          fi
+
+      - name: Build and test
+        run: |
+          dotnet restore Degausser.sln
+          dotnet build Degausser.sln -c Release --no-restore
+          dotnet test tests/Degausser.Core.Tests/Degausser.Core.Tests.csproj -c Release --no-build
+
+      - name: Publish release assets
+        run: ./scripts/publish-release.sh --skip-tests
+
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version=$(sed -n 's:.*<Version>\(.*\)</Version>.*:\1:p' Directory.Build.props | head -n 1)
+          extra=()
+          case "$version" in *-*) extra+=(--prerelease) ;; esac
+          # Release title drops a zero patch number: 3.0.0 -> "Degausser 3.0", 3.0.1 stays "Degausser 3.0.1".
+          title_version=$(echo "$version" | sed -E 's/^([0-9]+\.[0-9]+)\.0($|-)/\1\2/')
+          gh release create "$GITHUB_REF_NAME" \
+            artifacts/release/*.zip artifacts/release/SHA256SUMS.txt \
+            --verify-tag \
+            --title "Degausser $title_version" \
+            --generate-notes \
+            "${extra[@]}"

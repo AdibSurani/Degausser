@@ -1,0 +1,9 @@
+<Project>
+  <PropertyGroup>
+    <Version>3.0.0</Version>
+    <Authors>Adib Surani</Authors>
+    <Product>Degausser</Product>
+    <Copyright>Copyright © 2009-2026 Adib Surani</Copyright>
+    <RepositoryUrl>https://github.com/AdibSurani/Degausser</RepositoryUrl>
+  </PropertyGroup>
+</Project>

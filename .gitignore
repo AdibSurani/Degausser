@@ -210,3 +210,25 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# Upgrade scenario folder (local-only)
+
+# Local repository archaeology / previous handoff snapshots
+/ARCHIVE/
+
+# Local notes and private notes (not committed)
+NOTES.md
+PRIVATE-NOTES.md
+notes.txt
+TODO.md
+.notes/
+
+# Python archaeology caches
+__pycache__/
+*.py[cod]
+
+# Degausser3DS generated output
+/3ds/Degausser3DS/*.3dsx
+/3ds/Degausser3DS/*.smdh
+/3ds/Degausser3DS/*.elf
+/3ds/Degausser3DS/*.map

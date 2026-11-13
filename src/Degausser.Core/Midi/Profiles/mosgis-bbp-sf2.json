@@ -1,0 +1,1662 @@
+{
+  "format": "bbp2midi-instrument-profile",
+  "version": 2,
+  "baseProfileId": "mosgis",
+  "name": "Mosgis / BBP.sf2",
+  "description": "Mosgis instrument/drum mapping for BBP.sf2, including his +1 octave Synth Pad / Fat Lead adjustment. Newer v1.2 dynamics/chord fixes still apply.",
+  "soundFontName": "BBP.sf2",
+  "soundFontUrl": "https://musical-artifacts.com/artifacts/1657/BBP.sf2",
+  "gmCompatible": false,
+  "textEncoding": "shift-jis",
+  "instruments": [
+    {
+      "id": 0,
+      "name": "(Blank)",
+      "midiProgram": null,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 1,
+      "name": "Piano",
+      "midiProgram": 0,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 2,
+      "name": "Electric Piano",
+      "midiProgram": 5,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 3,
+      "name": "Rock Organ",
+      "midiProgram": 17,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 4,
+      "name": "Synth Lead",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 5,
+      "name": "Synth Bell",
+      "midiProgram": 88,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 6,
+      "name": "Pipe Organ",
+      "midiProgram": 19,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 7,
+      "name": "Folk Guitar",
+      "midiProgram": 25,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 8,
+      "name": "Electric Guitar",
+      "midiProgram": 26,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 9,
+      "name": "Distortion Guitar",
+      "midiProgram": 30,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 10,
+      "name": "Rock Guitar",
+      "midiProgram": 84,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 11,
+      "name": "Pick Bass",
+      "midiProgram": 34,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 12,
+      "name": "Synth Bass",
+      "midiProgram": 38,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 13,
+      "name": "Acoustic Bass",
+      "midiProgram": 32,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 14,
+      "name": "Strings",
+      "midiProgram": 48,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 15,
+      "name": "Violin",
+      "midiProgram": 40,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 16,
+      "name": "Double Bass",
+      "midiProgram": 43,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 17,
+      "name": "Harp",
+      "midiProgram": 46,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 18,
+      "name": "Pizzicato Violin",
+      "midiProgram": 45,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 19,
+      "name": "Piccolo",
+      "midiProgram": 72,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 20,
+      "name": "Flute",
+      "midiProgram": 73,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 21,
+      "name": "Clarinet",
+      "midiProgram": 71,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 22,
+      "name": "Oboe",
+      "midiProgram": 68,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 23,
+      "name": "Soprano Sax",
+      "midiProgram": 64,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 24,
+      "name": "Alto Sax",
+      "midiProgram": 65,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 25,
+      "name": "Brass",
+      "midiProgram": 61,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 26,
+      "name": "Trumpet",
+      "midiProgram": 56,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 27,
+      "name": "Trombone",
+      "midiProgram": 57,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 28,
+      "name": "Horn",
+      "midiProgram": 60,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 29,
+      "name": "Tuba",
+      "midiProgram": 58,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 30,
+      "name": "Harmonica",
+      "midiProgram": 22,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 31,
+      "name": "Pan Flute",
+      "midiProgram": 75,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 32,
+      "name": "Ocarina",
+      "midiProgram": 79,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 33,
+      "name": "Vibraphone",
+      "midiProgram": 11,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 34,
+      "name": "Marimba",
+      "midiProgram": 12,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 35,
+      "name": "Timpani",
+      "midiProgram": 47,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 36,
+      "name": "Steel Drum",
+      "midiProgram": 114,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 37,
+      "name": "Chorus",
+      "midiProgram": 52,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 38,
+      "name": "Shamisen",
+      "midiProgram": 106,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 39,
+      "name": "Koto",
+      "midiProgram": 107,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 40,
+      "name": "Shakuhachi",
+      "midiProgram": 77,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 41,
+      "name": "NES A",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 80,
+      "transpose": 0
+    },
+    {
+      "id": 42,
+      "name": "Rock Drums",
+      "midiProgram": 0,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        37,
+        54,
+        42,
+        47,
+        45,
+        48,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 0,
+      "transpose": 0
+    },
+    {
+      "id": 43,
+      "name": "Electronic Drums",
+      "midiProgram": 16,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        51,
+        54,
+        42,
+        47,
+        45,
+        48,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 16,
+      "transpose": 0
+    },
+    {
+      "id": 44,
+      "name": "Synth Drums",
+      "midiProgram": 25,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        29,
+        54,
+        42,
+        47,
+        45,
+        48,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 25,
+      "transpose": 0
+    },
+    {
+      "id": 45,
+      "name": "Percussion Set",
+      "midiProgram": 48,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        81,
+        38,
+        57,
+        54,
+        38,
+        54,
+        55,
+        59
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 48,
+      "transpose": 0
+    },
+    {
+      "id": 46,
+      "name": "Bongo Set",
+      "midiProgram": 0,
+      "drumNotes": [
+        0,
+        61,
+        60,
+        80,
+        81,
+        54,
+        75,
+        39,
+        69,
+        66,
+        65
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 0,
+      "transpose": 0
+    },
+    {
+      "id": 47,
+      "name": "Conga Set",
+      "midiProgram": 0,
+      "drumNotes": [
+        0,
+        64,
+        63,
+        62,
+        58,
+        83,
+        70,
+        26,
+        56,
+        77,
+        76
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 0,
+      "transpose": 0
+    },
+    {
+      "id": 48,
+      "name": "Japanese Percussion Set",
+      "midiProgram": 49,
+      "drumNotes": [
+        0,
+        26,
+        37,
+        36,
+        47,
+        40,
+        38,
+        37,
+        36,
+        42,
+        43
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 49,
+      "transpose": 0
+    },
+    {
+      "id": 49,
+      "name": "Piano",
+      "midiProgram": 0,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 50,
+      "name": "Electric Piano",
+      "midiProgram": 5,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 51,
+      "name": "Rock Organ",
+      "midiProgram": 17,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 52,
+      "name": "Synth Lead",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 53,
+      "name": "Synth Bell",
+      "midiProgram": 88,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 54,
+      "name": "Pipe Organ",
+      "midiProgram": 19,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 55,
+      "name": "Folk Guitar",
+      "midiProgram": 25,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 56,
+      "name": "Electric Guitar",
+      "midiProgram": 26,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 57,
+      "name": "Distortion Guitar",
+      "midiProgram": 30,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 58,
+      "name": "Rock Guitar",
+      "midiProgram": 84,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 59,
+      "name": "Pick Bass",
+      "midiProgram": 34,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 60,
+      "name": "Synth Bass",
+      "midiProgram": 38,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 61,
+      "name": "Acoustic Bass",
+      "midiProgram": 32,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 62,
+      "name": "Strings",
+      "midiProgram": 48,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 63,
+      "name": "Violin",
+      "midiProgram": 40,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 64,
+      "name": "Double Bass",
+      "midiProgram": 43,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 65,
+      "name": "Harp",
+      "midiProgram": 46,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 66,
+      "name": "Pizzicato Violin",
+      "midiProgram": 45,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 67,
+      "name": "Piccolo",
+      "midiProgram": 72,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 68,
+      "name": "Flute",
+      "midiProgram": 73,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 69,
+      "name": "Clarinet",
+      "midiProgram": 71,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 70,
+      "name": "Oboe",
+      "midiProgram": 68,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 71,
+      "name": "Soprano Sax",
+      "midiProgram": 64,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 72,
+      "name": "Alto Sax",
+      "midiProgram": 65,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 73,
+      "name": "Brass",
+      "midiProgram": 61,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 74,
+      "name": "Trumpet",
+      "midiProgram": 56,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 75,
+      "name": "Trombone",
+      "midiProgram": 57,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 76,
+      "name": "Horn",
+      "midiProgram": 60,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 77,
+      "name": "Tuba",
+      "midiProgram": 58,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 78,
+      "name": "Harmonica",
+      "midiProgram": 22,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 79,
+      "name": "Pan Flute",
+      "midiProgram": 75,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 80,
+      "name": "Ocarina",
+      "midiProgram": 79,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 81,
+      "name": "Vibraphone",
+      "midiProgram": 11,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 82,
+      "name": "Marimba",
+      "midiProgram": 12,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 83,
+      "name": "Timpani",
+      "midiProgram": 47,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 84,
+      "name": "Steel Drum",
+      "midiProgram": 114,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 85,
+      "name": "Chorus",
+      "midiProgram": 91,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 86,
+      "name": "Shamisen",
+      "midiProgram": 106,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 87,
+      "name": "Koto",
+      "midiProgram": 107,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 88,
+      "name": "Shakuhachi",
+      "midiProgram": 77,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 89,
+      "name": "NES A",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 80,
+      "transpose": 0
+    },
+    {
+      "id": 90,
+      "name": "Piano",
+      "midiProgram": 0,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 91,
+      "name": "Electric Piano",
+      "midiProgram": 5,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 92,
+      "name": "Rock Organ",
+      "midiProgram": 17,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 93,
+      "name": "Synth Lead",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 94,
+      "name": "Synth Bell",
+      "midiProgram": 88,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 95,
+      "name": "Pipe Organ",
+      "midiProgram": 19,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 96,
+      "name": "Folk Guitar",
+      "midiProgram": 25,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 97,
+      "name": "Electric Guitar",
+      "midiProgram": 26,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 98,
+      "name": "Distortion Guitar",
+      "midiProgram": 30,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 99,
+      "name": "Rock Guitar",
+      "midiProgram": 84,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 100,
+      "name": "Pick Bass",
+      "midiProgram": 34,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 101,
+      "name": "Synth Bass",
+      "midiProgram": 38,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 102,
+      "name": "Acoustic Bass",
+      "midiProgram": 32,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 103,
+      "name": "Strings",
+      "midiProgram": 48,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 104,
+      "name": "Violin",
+      "midiProgram": 40,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 105,
+      "name": "Double Bass",
+      "midiProgram": 43,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 106,
+      "name": "Harp",
+      "midiProgram": 46,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 107,
+      "name": "Pizzicato Violin",
+      "midiProgram": 45,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 108,
+      "name": "Piccolo",
+      "midiProgram": 72,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 109,
+      "name": "Flute",
+      "midiProgram": 73,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 110,
+      "name": "Clarinet",
+      "midiProgram": 71,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 111,
+      "name": "Oboe",
+      "midiProgram": 68,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 112,
+      "name": "Soprano Sax",
+      "midiProgram": 64,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 113,
+      "name": "Alto Sax",
+      "midiProgram": 65,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 114,
+      "name": "Brass",
+      "midiProgram": 61,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 115,
+      "name": "Trumpet",
+      "midiProgram": 56,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 116,
+      "name": "Trombone",
+      "midiProgram": 57,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 117,
+      "name": "Horn",
+      "midiProgram": 60,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 118,
+      "name": "Tuba",
+      "midiProgram": 58,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 119,
+      "name": "Harmonica",
+      "midiProgram": 22,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 120,
+      "name": "Pan Flute",
+      "midiProgram": 75,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 121,
+      "name": "Ocarina",
+      "midiProgram": 79,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 122,
+      "name": "Vibraphone",
+      "midiProgram": 11,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 123,
+      "name": "Marimba",
+      "midiProgram": 12,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 124,
+      "name": "Timpani",
+      "midiProgram": 47,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 125,
+      "name": "Steel Drum",
+      "midiProgram": 114,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 126,
+      "name": "Chorus",
+      "midiProgram": 91,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 127,
+      "name": "Shamisen",
+      "midiProgram": 106,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 128,
+      "name": "Koto",
+      "midiProgram": 107,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 129,
+      "name": "Shakuhachi",
+      "midiProgram": 77,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 130,
+      "name": "NES A",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 80,
+      "transpose": 0
+    },
+    {
+      "id": 131,
+      "name": "Harpsichord",
+      "midiProgram": 6,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 132,
+      "name": "Accordion",
+      "midiProgram": 21,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 133,
+      "name": "Mute Trumpet",
+      "midiProgram": 59,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 134,
+      "name": "Music Box",
+      "midiProgram": 10,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 135,
+      "name": "Banjo",
+      "midiProgram": 105,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 136,
+      "name": "Square Lead",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 137,
+      "name": "Spanish Guitar",
+      "midiProgram": 24,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 138,
+      "name": "Clean Guitar",
+      "midiProgram": 27,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 139,
+      "name": "Overdrive Guitar",
+      "midiProgram": 29,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 140,
+      "name": "Slap Bass",
+      "midiProgram": 36,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 141,
+      "name": "Harpsichord",
+      "midiProgram": 6,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 142,
+      "name": "Accordion",
+      "midiProgram": 21,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 143,
+      "name": "Mute Trumpet",
+      "midiProgram": 59,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 144,
+      "name": "Music Box",
+      "midiProgram": 10,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 145,
+      "name": "Banjo",
+      "midiProgram": 105,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 146,
+      "name": "Square Lead",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 147,
+      "name": "Spanish Guitar",
+      "midiProgram": 24,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 148,
+      "name": "Clean Guitar",
+      "midiProgram": 27,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 149,
+      "name": "Overdrive Guitar",
+      "midiProgram": 29,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 150,
+      "name": "Slap Bass",
+      "midiProgram": 36,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 151,
+      "name": "Harpsichord",
+      "midiProgram": 6,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 152,
+      "name": "Accordion",
+      "midiProgram": 21,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 153,
+      "name": "Mute Trumpet",
+      "midiProgram": 59,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 154,
+      "name": "Music Box",
+      "midiProgram": 10,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 155,
+      "name": "Banjo",
+      "midiProgram": 105,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 156,
+      "name": "Square Lead",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 157,
+      "name": "Spanish Guitar",
+      "midiProgram": 24,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 158,
+      "name": "Clean Guitar",
+      "midiProgram": 27,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 159,
+      "name": "Overdrive Guitar",
+      "midiProgram": 29,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 160,
+      "name": "Slap Bass",
+      "midiProgram": 36,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 161,
+      "name": "Electro Bass",
+      "midiProgram": 39,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 162,
+      "name": "Synth Pad",
+      "midiProgram": 50,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 163,
+      "name": "Fat Lead",
+      "midiProgram": 87,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 164,
+      "name": "Sine",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 8,
+      "bbpSfProgram": 80,
+      "transpose": 0
+    },
+    {
+      "id": 165,
+      "name": "NES B",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 81,
+      "transpose": 0
+    },
+    {
+      "id": 166,
+      "name": "NES C",
+      "midiProgram": 7,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 167,
+      "name": "NES Bass",
+      "midiProgram": 82,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 168,
+      "name": "Orchestra Hit",
+      "midiProgram": 55,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 169,
+      "name": "Tenor Sax",
+      "midiProgram": 66,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 170,
+      "name": "Cello",
+      "midiProgram": 42,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 171,
+      "name": "Bassoon",
+      "midiProgram": 70,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 172,
+      "name": "Electro Bass",
+      "midiProgram": 39,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 173,
+      "name": "Synth Pad",
+      "midiProgram": 50,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 174,
+      "name": "Fat Lead",
+      "midiProgram": 87,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 175,
+      "name": "Sine",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 8,
+      "bbpSfProgram": 80,
+      "transpose": 0
+    },
+    {
+      "id": 176,
+      "name": "NES B",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 81,
+      "transpose": 0
+    },
+    {
+      "id": 177,
+      "name": "NES C",
+      "midiProgram": 7,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 178,
+      "name": "NES Bass",
+      "midiProgram": 82,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 179,
+      "name": "Orchestra Hit",
+      "midiProgram": 55,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 180,
+      "name": "Tenor Sax",
+      "midiProgram": 66,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 181,
+      "name": "Cello",
+      "midiProgram": 42,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 182,
+      "name": "Bassoon",
+      "midiProgram": 70,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 183,
+      "name": "Electro Bass",
+      "midiProgram": 39,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 184,
+      "name": "Synth Pad",
+      "midiProgram": 50,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 185,
+      "name": "Fat Lead",
+      "midiProgram": 87,
+      "drumNotes": [],
+      "transpose": 12
+    },
+    {
+      "id": 186,
+      "name": "Sine",
+      "midiProgram": 80,
+      "drumNotes": [],
+      "bbpSfBank": 8,
+      "bbpSfProgram": 81,
+      "transpose": 0
+    },
+    {
+      "id": 187,
+      "name": "NES B",
+      "midiProgram": 81,
+      "drumNotes": [],
+      "bbpSfBank": 1,
+      "bbpSfProgram": 81,
+      "transpose": 0
+    },
+    {
+      "id": 188,
+      "name": "NES C",
+      "midiProgram": 7,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 189,
+      "name": "NES Bass",
+      "midiProgram": 82,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 190,
+      "name": "Orchestra Hit",
+      "midiProgram": 55,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 191,
+      "name": "Tenor Sax",
+      "midiProgram": 66,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 192,
+      "name": "Cello",
+      "midiProgram": 42,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 193,
+      "name": "Bassoon",
+      "midiProgram": 70,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 194,
+      "name": "Noise Drums",
+      "midiProgram": 24,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        44,
+        54,
+        42,
+        47,
+        45,
+        48,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 24,
+      "transpose": 0
+    },
+    {
+      "id": 195,
+      "name": "Jazz Drums",
+      "midiProgram": 32,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        37,
+        54,
+        42,
+        47,
+        45,
+        48,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 32,
+      "transpose": 0
+    },
+    {
+      "id": 196,
+      "name": "Pop Drums",
+      "midiProgram": 8,
+      "drumNotes": [
+        0,
+        35,
+        38,
+        51,
+        40,
+        42,
+        47,
+        45,
+        40,
+        46,
+        49
+      ],
+      "bbpSfBank": 128,
+      "bbpSfProgram": 8,
+      "transpose": 0
+    },
+    {
+      "id": 197,
+      "name": "Marimba (DX)",
+      "midiProgram": 12,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 198,
+      "name": "Electric Guitar (DX)",
+      "midiProgram": 26,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 199,
+      "name": "Clean Guitar (DX)",
+      "midiProgram": 27,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 200,
+      "name": "Pick Bass (DX)",
+      "midiProgram": 34,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 201,
+      "name": "Slap Bass (DX)",
+      "midiProgram": 36,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 202,
+      "name": "Synth Bass (DX)",
+      "midiProgram": 38,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 203,
+      "name": "Acoustic Bass (DX)",
+      "midiProgram": 32,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 204,
+      "name": "Synth Bell (DX)",
+      "midiProgram": 88,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 205,
+      "name": "Double Bass (DX)",
+      "midiProgram": 43,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 206,
+      "name": "Strings (DX)",
+      "midiProgram": 44,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 207,
+      "name": "Chorus (DX)",
+      "midiProgram": 52,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 208,
+      "name": "Trombone (DX)",
+      "midiProgram": 57,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 209,
+      "name": "Brass (DX)",
+      "midiProgram": 61,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 210,
+      "name": "Mute Trumpet (DX)",
+      "midiProgram": 59,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 211,
+      "name": "Oboe (DX)",
+      "midiProgram": 68,
+      "drumNotes": [],
+      "transpose": 0
+    },
+    {
+      "id": 212,
+      "name": "Ocarina (DX)",
+      "midiProgram": 79,
+      "drumNotes": [],
+      "transpose": 0
+    }
+  ]
+}

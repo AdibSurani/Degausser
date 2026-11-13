@@ -1,0 +1,400 @@
+<Window x:Class="Degausser.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:primitives="clr-namespace:Avalonia.Controls.Primitives;assembly=Avalonia.Controls"
+        Title="Degausser"
+        Width="1440" Height="900"
+        MinWidth="1040" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Icon="/Assets/Degausser.ico"
+        KeyDown="WindowKeyDown">
+  <DockPanel>
+    <Menu DockPanel.Dock="Top">
+      <MenuItem Header="_File">
+        <MenuItem x:Name="menuOpenSong" Header="Open _Song…" Click="OpenSongClicked" />
+        <MenuItem x:Name="menuOpenSave" Header="Open _3DS Content…" Click="OpenSaveClicked" />
+        <Separator />
+        <MenuItem x:Name="menuExportMidi" Header="Export Current Song as _MIDI…" Click="ExportMidiClicked" />
+        <Separator />
+        <MenuItem Header="_Settings…" Click="ShowSettingsClicked" />
+        <Separator />
+        <MenuItem Header="E_xit" Click="ExitClicked" />
+      </MenuItem>
+      <MenuItem Header="_3DS Content">
+        <MenuItem x:Name="menuImport" Header="_Import Selected from Library" Click="ImportClicked" ToolTip.Tip="Copies the songs selected in the Library into the open 3DS content. A restore point of the save is made first." />
+        <MenuItem x:Name="menuImportPackageFile" Header="Import BBPM / BBPV _File…" Click="ImportPackageFileClicked" ToolTip.Tip="Imports a movie (.bbpm) or Vocaloid (.bbpv) package, such as one made by Extract or shared by someone else. Songs are imported from the Library list instead." />
+        <MenuItem x:Name="menuExtract" Header="_Extract Selected to Library" Click="ExtractClicked" ToolTip.Tip="Saves the selected songs, movies or Vocaloids from the save as files in your library folder. The save is not changed." />
+        <Separator />
+        <MenuItem x:Name="menuEnglishContent" Header="Use _English titles and lyrics" ToggleType="CheckBox" IsChecked="True" ToolTip.Tip="Official songs Degausser has a romaji scorefix for are previewed and imported with their English title and lyrics, and known movies and singers are imported with English metadata. Your library files and original packages are not changed." />
+        <MenuItem x:Name="menuTranslateInstalledMovies" Header="Translate _movies already in this save to English…" Click="TranslateInstalledMoviesClicked" ToolTip.Tip="Applies the bundled English catalogue to movies you imported earlier: titles, descriptions, and the title and romaji lyrics inside each song. A restore point is made first." />
+        <Separator />
+        <MenuItem x:Name="menuRestoreBackup" Header="_Restore Save from Backup…" Click="RestoreBackupClicked" ToolTip.Tip="Degausser keeps a restore point before every change to a 3DS save. Pick one to put the save's lists back." />
+        <Separator />
+        <MenuItem x:Name="menuDelete" Header="_Delete Selected" Click="DeleteClicked" ToolTip.Tip="Removes the selected items from the save. The restore point made first keeps them, so Restore Save from Backup… can bring them back." />
+      </MenuItem>
+      <MenuItem Header="_Help">
+        <MenuItem Header="_About Degausser" Click="ShowAboutClicked" />
+      </MenuItem>
+    </Menu>
+
+    <Border DockPanel.Dock="Top" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="12,8">
+      <StackPanel Orientation="Horizontal">
+        <Button Classes="toolbar" Click="OpenSongClicked" ToolTip.Tip="Open a standalone BBP, BDX or BBPM (Ctrl+O)">
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="♫" FontSize="15"/><TextBlock Text="Open Song"/></StackPanel>
+        </Button>
+        <Button Classes="toolbar" Click="OpenSaveClicked" ToolTip.Tip="Open Band Brothers P save data: choose its folder (Ctrl+Shift+O)">
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="▣" FontSize="14"/><TextBlock Text="Open 3DS Content"/></StackPanel>
+        </Button>
+        <Border Width="1" Height="22" Background="{DynamicResource BorderBrush}" Margin="4,4,10,4" />
+        <Button x:Name="btnToolbarImport" Classes="toolbar" Click="ImportClicked" ToolTip.Tip="Import selected library item(s) into active 3DS content (Ctrl+I)">
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="→" FontSize="16"/><TextBlock x:Name="txtToolbarImportLabel" Text="Import to Save"/></StackPanel>
+        </Button>
+        <Button x:Name="btnToolbarExtract" Classes="toolbar" Click="ExtractClicked" ToolTip.Tip="Extract selected 3DS item(s) into your library (Ctrl+E)">
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="←" FontSize="16"/><TextBlock x:Name="txtToolbarExtractLabel" Text="Extract to Library"/></StackPanel>
+        </Button>
+        <Border Width="1" Height="22" Background="{DynamicResource BorderBrush}" Margin="4,4,10,4" />
+        <Button x:Name="btnToolbarMidi" Classes="toolbar" Click="ExportMidiClicked" ToolTip.Tip="Export the current song as MIDI (Ctrl+M)">
+          <StackPanel Orientation="Horizontal" Spacing="6"><TextBlock Text="⇩" FontSize="14"/><TextBlock Text="MIDI"/></StackPanel>
+        </Button>
+      </StackPanel>
+    </Border>
+
+    <Border DockPanel.Dock="Bottom" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="10,5">
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBlock x:Name="txtStatusMessage" Text="Ready" VerticalAlignment="Center" />
+        <TextBlock x:Name="txtSaveStatus" Grid.Column="1" Text="No 3DS content open" Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <Border DockPanel.Dock="Bottom" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0" Padding="14,10">
+      <Grid ColumnDefinitions="280,Auto,*,Auto,150">
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="0,0,14,0">
+          <TextBlock x:Name="txtNowPlayingTitle" Text="Nothing playing" FontWeight="SemiBold" FontSize="14" TextTrimming="CharacterEllipsis" />
+          <TextBlock x:Name="txtNowPlayingSubtitle" Text="Double-click a song to preview it" Classes="muted" FontSize="11" TextTrimming="CharacterEllipsis" />
+        </StackPanel>
+        <Button x:Name="btnPlayPause" Grid.Column="1" Classes="modern primary" Click="PlayPauseClicked" Margin="0,0,12,0" MinWidth="96" ToolTip.Tip="Play or pause (Ctrl+P)">
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Center">
+            <Path x:Name="icoPlayPause" Data="M0,0 L10,6 L0,12 Z" Fill="{Binding $parent[Button].Foreground}" VerticalAlignment="Center" />
+            <TextBlock x:Name="txtPlayPauseLabel" Text="Play" VerticalAlignment="Center" />
+          </StackPanel>
+        </Button>
+        <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="0,0,14,0">
+          <Slider AutomationProperties.Name="Playback position" Value="{Binding Position, Mode=TwoWay}" Maximum="{Binding SeekMaximum}" LargeChange="48" SmallChange="12" />
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="4">
+            <TextBlock Text="{Binding PositionTimeText}" FontSize="11" Foreground="{DynamicResource MutedTextBrush}" />
+            <TextBlock Text="/" FontSize="11" Foreground="{DynamicResource MutedTextBrush}" />
+            <TextBlock Text="{Binding LengthTimeText}" FontSize="11" Foreground="{DynamicResource MutedTextBrush}" />
+          </StackPanel>
+        </StackPanel>
+        <TextBlock Grid.Column="3" Text="Volume" VerticalAlignment="Center" Margin="0,0,8,0" Foreground="{DynamicResource MutedTextBrush}" />
+        <Slider Grid.Column="4" AutomationProperties.Name="Volume" Value="{Binding Volume, Mode=TwoWay}" Maximum="65535" LargeChange="4000" SmallChange="500" VerticalAlignment="Center" />
+      </Grid>
+    </Border>
+
+    <Grid Margin="14">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1.8*" MinWidth="560" />
+        <ColumnDefinition Width="12" />
+        <ColumnDefinition Width="*" MinWidth="430" />
+      </Grid.ColumnDefinitions>
+
+      <Border Grid.Column="0" Classes="card">
+        <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto">
+          <Grid Grid.Row="0" Margin="0,0,0,12" ColumnDefinitions="*,Auto">
+            <StackPanel>
+              <TextBlock Text="Library" FontSize="19" FontWeight="SemiBold" />
+              <TextBlock x:Name="txtLibraryDescription" Text="" Classes="muted" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+            <Button Grid.Column="1" Classes="modern" Click="RefreshClicked" Content="↻  Refresh" />
+          </Grid>
+
+          <Grid Grid.Row="1" Margin="0,0,0,10" ColumnDefinitions="*,Auto">
+            <TextBox x:Name="txtLibrarySearch" AutomationProperties.Name="Search the library" PlaceholderText="Song, artist, anime, game, author or filename (English or Japanese)" TextChanged="LibrarySearchChanged" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="10,0,0,0">
+              <ToggleButton x:Name="btnScopeFiles" Classes="segment first" Content="My files" IsChecked="True" Click="LibraryScopeClicked" ToolTip.Tip="Only the files in your library folder" />
+              <ToggleButton x:Name="btnScopeCatalogue" Classes="segment last" Content="Whole catalogue" IsChecked="False" Click="LibraryScopeClicked" ToolTip.Tip="Also list the official arrangements you don't have (Ctrl+Shift+F)" />
+            </StackPanel>
+          </Grid>
+
+          <!-- Matching franchises / works / artists; picking one browses it. -->
+          <ItemsControl x:Name="lstCatalogueCollections" Grid.Row="2" Margin="0,0,0,6" IsVisible="False">
+            <ItemsControl.ItemsPanel>
+              <ItemsPanelTemplate><WrapPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <Button Classes="modern" Padding="10,4" Margin="0,0,6,6" Click="CatalogueCollectionClicked" ToolTip.Tip="{Binding Tooltip}">
+                  <StackPanel Orientation="Horizontal" Spacing="6">
+                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" MaxWidth="240" TextTrimming="CharacterEllipsis" />
+                    <TextBlock Text="{Binding Detail}" Foreground="{DynamicResource MutedTextBrush}" />
+                  </StackPanel>
+                </Button>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+          <Border x:Name="pnlCatalogueCollection" Grid.Row="3" IsVisible="False" Background="{DynamicResource SurfaceMutedBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="10,8" Margin="0,0,0,10">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+              <StackPanel VerticalAlignment="Center">
+                <TextBlock x:Name="txtCatalogueCollectionTitle" FontSize="15" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                <TextBlock x:Name="txtCatalogueCollectionDetail" Classes="muted" TextTrimming="CharacterEllipsis" />
+              </StackPanel>
+              <Button x:Name="btnCatalogueImportCollection" Grid.Column="1" Classes="modern primary" Margin="8,0,6,0" Click="ImportCatalogueCollectionClicked" />
+              <Button Grid.Column="2" Classes="modern" Content="✕" Padding="10,4" Click="ClearCatalogueCollectionClicked" ToolTip.Tip="Stop browsing this collection" />
+            </Grid>
+          </Border>
+
+          <Grid x:Name="pnlLibraryScan" Grid.Row="4" Margin="0,0,0,10" RowDefinitions="Auto,Auto" IsVisible="False">
+            <Grid ColumnDefinitions="*,Auto">
+              <TextBlock x:Name="txtLibraryScanProgress" Text="Scanning library…" Foreground="{DynamicResource MutedTextBrush}" VerticalAlignment="Center" />
+              <Button Grid.Column="1" Classes="modern" Content="Cancel" Padding="10,3" Margin="8,0,0,0" Click="CancelLibraryScan" />
+            </Grid>
+            <ProgressBar x:Name="prgLibraryScan" Grid.Row="1" Height="4" Margin="0,6,0,0" Minimum="0" Maximum="1" IsIndeterminate="True" />
+          </Grid>
+
+          <DataGrid x:Name="lstMediaLibrary" Grid.Row="5"
+                    AutoGenerateColumns="False" IsReadOnly="True"
+                    SelectionMode="Extended"
+                    CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True"
+                    SelectionChanged="LibrarySelectionChanged"
+                    LoadingRow="LibraryLoadingRow"
+                    DoubleTapped="LibraryDoubleTapped">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="2.2*" MinWidth="150" SortMemberPath="Title" />
+              <DataGridTextColumn Binding="{Binding EnglishTitle}" Width="1.6*" MinWidth="100" SortMemberPath="EnglishTitle"><DataGridTextColumn.Header><TextBlock Text="English title" ToolTip.Tip="The catalogue’s English title for official songs, shown when it differs from the title in the file." /></DataGridTextColumn.Header></DataGridTextColumn>
+              <DataGridTextColumn Header="Artist" Binding="{Binding Artist}" Width="1.2*" MinWidth="80" SortMemberPath="Artist" />
+              <DataGridTextColumn Header="From" Binding="{Binding Context}" Width="1.2*" MinWidth="80" SortMemberPath="Context" />
+              <DataGridTextColumn Binding="{Binding Author}" Width="1*" MinWidth="90" SortMemberPath="Author"><DataGridTextColumn.Header><TextBlock Text="Author" ToolTip.Tip="The author named in the file (the game calls this Author). “name (DX)” means it was migrated from Daigasso! Band Brothers DX by that person." /></DataGridTextColumn.Header></DataGridTextColumn>
+              <DataGridTextColumn Header="Parts" Binding="{Binding Parts}" Width="64" SortMemberPath="Parts" />
+              <DataGridTextColumn Binding="{Binding Features}" Width="1.3*" MinWidth="100" SortMemberPath="Features"><DataGridTextColumn.Header><TextBlock Text="Features" ToolTip.Tip="Lyrics: has karaoke. Lyrics (EN): Degausser also has an English scorefix for it. Piano and Guitar: playable parts. Vocaloid: has Vocaloid data." /></DataGridTextColumn.Header></DataGridTextColumn>
+              <DataGridTextColumn Binding="{Binding Format}" Width="64" SortMemberPath="Format"><DataGridTextColumn.Header><TextBlock Text="Type" ToolTip.Tip="BBP is the format the 3DS game uses. A BDX is the older DX format and is converted when you preview or import it." /></DataGridTextColumn.Header></DataGridTextColumn>
+            </DataGrid.Columns>
+          </DataGrid>
+
+          <TextBlock x:Name="txtLibraryEmpty" Grid.Row="5" IsVisible="False" IsHitTestVisible="False"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+                     MaxWidth="380" Margin="0,40,0,0" Foreground="{DynamicResource MutedTextBrush}" />
+
+          <Grid Grid.Row="6" Margin="0,12,0,0" ColumnDefinitions="*,Auto,Auto">
+            <TextBlock x:Name="txtLibraryCount" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" Foreground="{DynamicResource MutedTextBrush}" Text="0 selected · 0 shown" />
+            <Button x:Name="btnLibraryPreview" Grid.Column="1" Classes="modern" Content="▶  Preview" Margin="0,0,8,0" Click="PlaySelectedLibrary" ToolTip.Tip="Plays the selected song here. Nothing in your library or your saves changes." ToolTip.ShowOnDisabled="True" />
+            <Button x:Name="btnImport" Grid.Column="2" Classes="modern primary" Click="ImportClicked" ToolTip.Tip="Copies the selected songs into the open 3DS content, after making a restore point. With “Use English titles and lyrics” ticked in the 3DS Content menu, songs that have a scorefix get their English title and lyrics." ToolTip.ShowOnDisabled="True">
+              <StackPanel Orientation="Horizontal"><TextBlock x:Name="txtImportButtonLabel" Text="Import to Save"/><TextBlock Text="  →"/></StackPanel>
+            </Button>
+          </Grid>
+        </Grid>
+      </Border>
+
+      <GridSplitter Grid.Column="1" Width="12" HorizontalAlignment="Stretch" Background="Transparent" />
+
+      <TabControl x:Name="rightTabs" Grid.Column="2" SelectionChanged="RightTabSelectionChanged">
+        <TabItem x:Name="tabSaveManager" Header="3DS Content">
+          <Grid Margin="0,6,0,0" RowDefinitions="Auto,*">
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="8" Margin="0,0,0,8">
+              <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Right" Classes="modern" Click="OpenSaveClicked" Content="＋  Open 3DS Content…" Margin="8,0,0,0" />
+                <ListBox x:Name="lstExtDataSessions" BorderThickness="0" Background="Transparent" SelectionMode="Single" SelectionChanged="ExtDataSessionSelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                  <ListBox.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate></ListBox.ItemsPanel>
+                  <ListBox.ItemTemplate>
+                    <DataTemplate>
+                      <Border Background="{DynamicResource SurfaceMutedBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="5" Padding="9,5" Margin="0,0,5,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                          <StackPanel VerticalAlignment="Center" MaxWidth="210">
+                            <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding FolderPath}" ToolTip.Tip="{Binding FolderPath}" FontSize="10" Foreground="{DynamicResource MutedTextBrush}" TextTrimming="CharacterEllipsis" />
+                          </StackPanel>
+                          <Button Content="×" AutomationProperties.Name="Close this 3DS content" ToolTip.Tip="Close this 3DS content" Click="CloseExtDataSession" Width="28" Height="28" Padding="0" Margin="8,0,0,0" Background="Transparent" BorderThickness="0" Foreground="{DynamicResource MutedTextBrush}" />
+                        </StackPanel>
+                      </Border>
+                    </DataTemplate>
+                  </ListBox.ItemTemplate>
+                </ListBox>
+              </DockPanel>
+            </Border>
+
+            <Border Grid.Row="1" Classes="card">
+              <Grid RowDefinitions="Auto,*">
+                <Grid Grid.Row="0" Margin="0,0,0,8" ColumnDefinitions="*,Auto">
+                  <StackPanel>
+                    <TextBlock Text="3DS Content" FontSize="19" FontWeight="SemiBold" />
+                    <TextBlock x:Name="txtSaveDataDescription" Text="No 3DS content open" Classes="muted" Margin="0,3,0,0" TextTrimming="CharacterEllipsis" />
+                  </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                  <TabControl x:Name="pnlSaveContent" IsVisible="False" SelectionChanged="SaveContentTabSelectionChanged">
+                    <TabItem x:Name="tabSaveSongs" Header="Songs">
+                      <Grid RowDefinitions="Auto,*,Auto" Margin="0,8,0,0">
+                        <Grid Grid.Row="0" Margin="0,0,0,10" ColumnDefinitions="Auto,*">
+                          <TextBlock Text="Search" VerticalAlignment="Center" Margin="0,0,8,0" FontWeight="SemiBold" />
+                          <TextBox x:Name="txtSaveSearch" AutomationProperties.Name="Search this save" Grid.Column="1" PlaceholderText="Title, author or slot" TextChanged="SaveSearchChanged" />
+                        </Grid>
+                        <DataGrid x:Name="lstSaveEditor" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True" SelectionChanged="SaveSelectionChanged" DoubleTapped="SaveDoubleTapped">
+                          <DataGrid.Columns>
+                            <DataGridTextColumn Header="Slot" Binding="{Binding Slot}" Width="58" SortMemberPath="Slot" />
+                            <DataGridTextColumn Header="Title" Binding="{Binding Title}" Width="2*" SortMemberPath="Title" />
+                            <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="1.15*" SortMemberPath="Author" />
+                            <DataGridCheckBoxColumn Header="Lyrics" Binding="{Binding HasKaraoke}" Width="70" SortMemberPath="HasKaraoke" />
+                            <DataGridCheckBoxColumn Header="Piano" Binding="{Binding HasPiano}" Width="68" SortMemberPath="HasPiano" />
+                            <DataGridCheckBoxColumn Header="Guitar" Binding="{Binding HasGuitar}" Width="72" SortMemberPath="HasGuitar" />
+                          </DataGrid.Columns>
+                        </DataGrid>
+                        <TextBlock x:Name="txtSaveSongsEmpty" Grid.Row="1" IsVisible="False" IsHitTestVisible="False"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" TextWrapping="Wrap"
+                                   MaxWidth="320" Margin="0,40,0,0" Foreground="{DynamicResource MutedTextBrush}" />
+                        <Grid Grid.Row="2" Margin="0,12,0,0" ColumnDefinitions="*,Auto,Auto,Auto">
+                          <TextBlock x:Name="txtSaveCount" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" Foreground="{DynamicResource MutedTextBrush}" Text="0 selected · 0 songs" />
+                          <Button x:Name="btnSavePreview" Grid.Column="1" Classes="modern" Content="▶  Preview" Margin="0,0,8,0" Click="PlaySelectedSave" ToolTip.Tip="Plays the selected song from the save." ToolTip.ShowOnDisabled="True" />
+                          <Button x:Name="btnExtract" Grid.Column="2" Classes="modern" Click="ExtractClicked" Margin="0,0,8,0" ToolTip.Tip="Saves the selected songs as files in your library folder. The save is not changed." ToolTip.ShowOnDisabled="True"><TextBlock x:Name="txtExtractButtonLabel" Text="←  Extract to Library" /></Button>
+                          <Button x:Name="btnDelete" Grid.Column="3" Classes="modern danger" Click="DeleteClicked" Content="Delete" ToolTip.Tip="Removes the selected songs from the save. A restore point is made first, so Restore Save from Backup… can bring them back." ToolTip.ShowOnDisabled="True" />
+                        </Grid>
+                      </Grid>
+                    </TabItem>
+
+                    <TabItem x:Name="tabSaveMovies" Header="Movies">
+                      <Grid RowDefinitions="*,Auto" Margin="0,8,0,0">
+                        <DataGrid x:Name="lstSaveMovies" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True" SelectionChanged="MovieSelectionChanged" DoubleTapped="MovieDoubleTapped">
+                          <DataGrid.Columns>
+                            <DataGridTextColumn Header="Slot" Binding="{Binding MovieSlot}" Width="60" />
+                            <DataGridTextColumn Header="Movie" Binding="{Binding MovieTitle}" Width="1.7*" />
+                            <DataGridTextColumn Header="Song" Binding="{Binding SongTitle}" Width="1.5*" />
+                            <DataGridTextColumn Header="Author" Binding="{Binding Author}" Width="1*" />
+                            <DataGridCheckBoxColumn Header="Voc" Binding="{Binding HasVocals}" Width="56" />
+                            <DataGridCheckBoxColumn Header="Files" Binding="{Binding FilesPresent}" Width="60" />
+                          </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="1" Margin="0,12,0,0" ColumnDefinitions="*,Auto,Auto">
+                          <TextBlock x:Name="txtMovieCount" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" Foreground="{DynamicResource MutedTextBrush}" Text="0 selected · 0 movies" />
+                          <Button x:Name="btnMoviePreview" Grid.Column="1" Classes="modern" Content="▶  Preview track" Margin="0,0,8,0" Click="PlaySelectedMovie" ToolTip.Tip="Plays the song that goes with the selected movie. The video itself is not played." ToolTip.ShowOnDisabled="True" />
+                          <Button Grid.Column="2" Classes="modern" Content="←  Extract BBPM" Click="ExtractClicked" ToolTip.Tip="Saves the selected movies as portable .bbpm packages in your library folder, which can be imported into another save." />
+                        </Grid>
+                      </Grid>
+                    </TabItem>
+
+                    <TabItem x:Name="tabSaveSingers" Header="Vocaloids">
+                      <Grid RowDefinitions="*,Auto" Margin="0,8,0,0">
+                        <DataGrid x:Name="lstSaveSingers" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Extended" CanUserSortColumns="True" CanUserResizeColumns="True" CanUserReorderColumns="True" SelectionChanged="SingerSelectionChanged">
+                          <DataGrid.Columns>
+                            <DataGridTextColumn Header="Slot" Binding="{Binding Slot}" Width="60" />
+                            <DataGridTextColumn Header="Singer" Binding="{Binding Artist}" Width="1.4*" />
+                            <DataGridTextColumn Header="Voice" Binding="{Binding VoiceCodeHex}" Width="70" />
+                            <DataGridTextColumn Header="DB" Binding="{Binding Database}" Width="68" />
+                            <DataGridTextColumn Header="Greeting" Binding="{Binding GreetingLine}" Width="2*" />
+                            <DataGridCheckBoxColumn Header="Files" Binding="{Binding FilesPresent}" Width="52" />
+                          </DataGrid.Columns>
+                        </DataGrid>
+                        <Grid Grid.Row="1" Margin="0,12,0,0" ColumnDefinitions="*,Auto">
+                          <TextBlock x:Name="txtSingerCount" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Margin="0,0,10,0" Foreground="{DynamicResource MutedTextBrush}" Text="0 selected · 0 Vocaloids" />
+                          <Button Grid.Column="1" Classes="modern" Content="←  Extract BBPV" Click="ExtractClicked" ToolTip.Tip="Saves the selected Vocaloids as portable .bbpv packages in your library folder, which can be imported into another save." />
+                        </Grid>
+                      </Grid>
+                    </TabItem>
+                  </TabControl>
+
+                  <Border x:Name="pnlSaveEmpty" Background="{DynamicResource SurfaceMutedBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="24" IsVisible="True">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="380">
+                      <TextBlock Text="No 3DS content open" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                      <TextBlock Text="Choose your Band Brothers P save data folder: the one with jb, mv and singer inside (with the English patch, the P folder on the SD card). You can open several saves at once and import into any of them. Degausser makes a restore point before it changes anything." TextWrapping="Wrap" TextAlignment="Center" Classes="muted" Margin="0,8,0,14" />
+                      <Button Classes="modern primary" Click="OpenSaveClicked" Content="Open 3DS Content…" HorizontalAlignment="Center" />
+                    </StackPanel>
+                  </Border>
+                </Grid>
+              </Grid>
+            </Border>
+          </Grid>
+        </TabItem>
+
+        <TabItem x:Name="tabPlayer" Header="Now Playing">
+          <Border Classes="card" Margin="0,6,0,0">
+            <!-- On a short window the pane scrolls instead of letting the karaoke cover the parts.
+                 UpdatePlayerPaneHeight gives the grid the viewport height, or the height it needs if that is more. -->
+            <ScrollViewer x:Name="playerScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <Grid x:Name="playerGrid" RowDefinitions="Auto,Auto,*,Auto" VerticalAlignment="Top">
+              <Grid x:Name="playerHeader" Grid.Row="0" Margin="0,0,0,8">
+                <StackPanel>
+                  <TextBlock x:Name="txtPlayerSource" Text="NOW PLAYING" FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource AccentBrush}" />
+                  <TextBlock x:Name="txtPlayerTitle" Text="Nothing playing" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="1" Margin="0,3,0,2" ToolTip.Tip="{Binding Text, ElementName=txtPlayerTitle}" />
+                  <TextBlock x:Name="txtPlayerSubtitle" Text="Preview a song from either pane" Classes="muted" TextWrapping="Wrap" TextTrimming="CharacterEllipsis" MaxLines="1" ToolTip.Tip="{Binding Text, ElementName=txtPlayerSubtitle}" />
+                </StackPanel>
+              </Grid>
+
+              <Border x:Name="playerParts" Grid.Row="1" Background="{DynamicResource SurfaceMutedBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,10">
+                <StackPanel Spacing="2">
+                  <TextBlock Text="Parts" FontWeight="SemiBold" />
+                  <!-- The game presents its ten parts as a fixed 2 x 5 panel.
+                       Keep that structure even when the desktop pane is resized;
+                       the two columns grow/shrink rather than reflowing. -->
+                  <ItemsControl ItemsSource="{Binding Channels}">
+                    <ItemsControl.ItemsPanel>
+                      <ItemsPanelTemplate>
+                        <primitives:UniformGrid Columns="2" Rows="5" ColumnSpacing="12" RowSpacing="0" />
+                      </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                      <DataTemplate>
+                        <CheckBox IsChecked="{Binding IsActive, Mode=TwoWay}"
+                                  IsEnabled="{Binding IsAvailable}"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Center"
+                                  Margin="0,-2" Padding="8,0,0,0" MinHeight="24" HorizontalAlignment="Stretch"
+                                  ToolTip.Tip="{Binding InstrumentName}">
+                          <Border Classes="partRow" Padding="6,1" CornerRadius="4">
+                            <Grid ColumnDefinitions="30,*" Height="22">
+                              <TextBlock Text="{Binding PartNumber}"
+                                         FontWeight="SemiBold"
+                                         Foreground="{DynamicResource MutedTextBrush}"
+                                         VerticalAlignment="Center" />
+                              <TextBlock Grid.Column="1"
+                                         Text="{Binding InstrumentName}"
+                                         TextTrimming="CharacterEllipsis"
+                                         VerticalAlignment="Center" />
+                            </Grid>
+                          </Border>
+                        </CheckBox>
+                      </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                  </ItemsControl>
+                </StackPanel>
+              </Border>
+
+              <Border Grid.Row="2" Background="{DynamicResource KaraokeBackgroundBrush}" BorderBrush="#252A32" BorderThickness="1" CornerRadius="7" Padding="10" >
+                <ScrollViewer x:Name="karaokeViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                  <StackPanel x:Name="karaokeLinesPanel" Margin="4,30">
+                    <TextBlock Text="Karaoke lyrics appear here when a song has them." Foreground="#8A93A0" FontSize="14" TextAlignment="Center" Margin="8,40" />
+                  </StackPanel>
+                </ScrollViewer>
+              </Border>
+
+              <!-- One line, so the karaoke keeps its height on small screens. The SHA-256 is in the tooltip. -->
+              <StackPanel x:Name="playerDetails" Grid.Row="3" Margin="2,8,0,0">
+                <Grid ColumnDefinitions="*,Auto,Auto">
+                  <TextBlock x:Name="txtPlayerDetails" Text="No song loaded" Classes="muted" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" Margin="0,0,8,0" />
+                  <Button x:Name="btnScorefix" Grid.Column="1" Classes="modern" Click="ApplyScorefixClicked" Content="Apply scorefix…" VerticalAlignment="Center" Margin="0,0,8,0" ToolTip.ShowOnDisabled="True" ToolTip.Tip="Gives this song an English title and romaji lyrics (a “scorefix”). Degausser checks the text against the song’s own Japanese karaoke before changing anything. It starts from the scorefix Degausser has for this song, or from the song’s current title and lyrics. For a song opened from the Library the change is only in this preview; for a song from 3DS Content it is written into the save, after a restore point. Preview a song first." />
+                  <Button x:Name="btnPlayerMidi" Grid.Column="2" Classes="modern" Click="ExportMidiClicked" Content="Export MIDI…" VerticalAlignment="Center" ToolTip.Tip="Saves the current song as a MIDI file (Ctrl+M)." ToolTip.ShowOnDisabled="True" />
+                </Grid>
+                <Grid ColumnDefinitions="*,Auto" Margin="0,5,0,0" IsVisible="{Binding AvailabilityMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                  <TextBlock Text="{Binding AvailabilityMessage}" Foreground="#B54708" TextWrapping="Wrap" VerticalAlignment="Center" />
+                  <Button Grid.Column="1" Classes="modern" Content="Settings…" Click="ShowSettingsClicked" Margin="12,0,0,0" />
+                </Grid>
+              </StackPanel>
+            </Grid>
+            </ScrollViewer>
+          </Border>
+        </TabItem>
+
+
+        <TabItem x:Name="tabActivity" Header="Activity">
+          <Border Classes="card" Margin="0,6,0,0">
+            <Grid RowDefinitions="Auto,*">
+              <StackPanel Margin="0,0,0,12">
+                <TextBlock Text="Activity" FontSize="19" FontWeight="SemiBold" />
+                <TextBlock Text="Recent operations and diagnostics. A log file is kept only when “Keep these settings between sessions” is on in Settings." Classes="muted" Margin="0,3,0,0" />
+              </StackPanel>
+              <TextBox x:Name="txtLogView" Grid.Row="1" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" FontFamily="monospace" FontSize="12" />
+            </Grid>
+          </Border>
+        </TabItem>
+      </TabControl>
+    </Grid>
+  </DockPanel>
+</Window>
